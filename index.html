@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <!-- Sin favicon en web; el icono solo aparece al instalar la app (viene del manifest) -->
   <link rel="icon" href="data:,">
-  <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="Interbank">
-  <meta name="mobile-web-app-capable" content="yes">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
 
   <meta name="theme-color" content="#FFFFFF">
@@ -811,6 +807,15 @@ app-contactos .ct-input{
 }
 app-contactos input.ct-input::selection{background:Highlight;color:HighlightText;}
 </style>
+
+  <!-- PWA instalable iPhone / Android -->
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Interbank">
+  <meta name="application-name" content="Interbank">
+
 </head>
 <body>
   <div id="splash"><img src="assets/interbank-logo.svg" alt="Interbank"></div>
@@ -1180,48 +1185,77 @@ window.__IBK_CONTACTS_REMOTE_RESOLVE(contactApi);
 <!-- v16: búsqueda usa el app-preload ORIGINAL de la app; no se modifica ni oculta cuadro-login-icon.svg -->
 
 <style id="pwa-install-ui-style">
-#pwaInstallBar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:2147483000;background:#fff;border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.20);padding:12px 12px 12px 14px;display:none;align-items:center;gap:10px;font-family:Arial,sans-serif;color:#151515}
-#pwaInstallBar.show{display:flex}
-#pwaInstallBar img{width:42px;height:42px;border-radius:10px;flex:none}
-#pwaInstallBar .pwaTxt{min-width:0;flex:1}.pwaInstallTitle{font-size:14px;font-weight:700;line-height:1.2}.pwaInstallSub{font-size:11px;color:#666;margin-top:3px;line-height:1.25}
-#pwaInstallBtn{border:0;border-radius:11px;background:#05bf4f;color:#fff;font-size:12px;font-weight:700;padding:10px 12px;white-space:nowrap}
-#pwaInstallClose{border:0;background:transparent;color:#777;font-size:20px;line-height:1;padding:4px}
-#pwaIosHelp{position:fixed;inset:0;z-index:2147483001;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;padding:16px 16px calc(20px + env(safe-area-inset-bottom,0px));font-family:Arial,sans-serif}
-#pwaIosHelp.show{display:flex}.pwaIosCard{background:#fff;border-radius:18px;padding:18px;width:min(420px,100%);box-shadow:0 8px 30px rgba(0,0,0,.28)}.pwaIosCard h3{margin:0 0 8px;font-size:18px}.pwaIosCard p{margin:6px 0;font-size:14px;line-height:1.4;color:#333}.pwaIosCard button{width:100%;margin-top:12px;border:0;border-radius:12px;background:#05bf4f;color:#fff;padding:12px;font-weight:700}
-@media (display-mode:standalone){#pwaInstallBar,#pwaIosHelp{display:none!important}}
+#pwa-install-card{position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:2147483000;background:#fff;color:#181818;border-radius:18px;box-shadow:0 10px 38px rgba(0,0,0,.23);padding:14px 14px 13px;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:none;max-width:440px;margin:0 auto;border:1px solid rgba(0,0,0,.08)}
+#pwa-install-card .pwa-row{display:flex;align-items:center;gap:11px}
+#pwa-install-card .pwa-icon{width:46px;height:46px;border-radius:12px;object-fit:cover;flex:0 0 46px}
+#pwa-install-card .pwa-copy{min-width:0;flex:1}
+#pwa-install-card .pwa-title{font-weight:750;font-size:15px;line-height:1.15;margin:0 0 3px}
+#pwa-install-card .pwa-sub{font-size:12px;line-height:1.3;color:#666;margin:0}
+#pwa-install-card .pwa-actions{display:flex;gap:8px;margin-top:11px}
+#pwa-install-card button{border:0;border-radius:12px;padding:10px 13px;font-size:13px;font-weight:700;cursor:pointer}
+#pwa-install-card .pwa-install{background:#05bf4f;color:#fff;flex:1}
+#pwa-install-card .pwa-close{background:#f1f2f4;color:#333}
+#pwa-ios-help{display:none;margin-top:10px;background:#f7f7f8;border-radius:12px;padding:10px 11px;font-size:12px;line-height:1.45;color:#333}
 </style>
-<div id="pwaInstallBar" role="dialog" aria-label="Instalar aplicación">
-  <img src="./assets/icons/icon-192.png" alt="">
-  <div class="pwaTxt"><div class="pwaInstallTitle">Instalar app</div><div class="pwaInstallSub" id="pwaInstallSub">Úsala como una app y vuelve a abrirla sin conexión.</div></div>
-  <button id="pwaInstallBtn" type="button">Instalar</button>
-  <button id="pwaInstallClose" type="button" aria-label="Cerrar">×</button>
+<div id="pwa-install-card" role="dialog" aria-live="polite" aria-label="Instalar aplicación">
+  <div class="pwa-row">
+    <img class="pwa-icon" src="/assets/icons/icon-192.png" alt="">
+    <div class="pwa-copy">
+      <div class="pwa-title">Instalar Interbank</div>
+      <p class="pwa-sub" id="pwa-install-sub">Úsala como app y ábrela también sin conexión.</p>
+    </div>
+  </div>
+  <div id="pwa-ios-help">En iPhone: toca <b>Compartir</b> en Safari y luego <b>Agregar a pantalla de inicio</b>.</div>
+  <div class="pwa-actions">
+    <button type="button" class="pwa-close" id="pwa-install-later">Ahora no</button>
+    <button type="button" class="pwa-install" id="pwa-install-btn">Instalar app</button>
+  </div>
 </div>
-<div id="pwaIosHelp" aria-hidden="true"><div class="pwaIosCard"><h3>Instalar en iPhone</h3><p>1. Abre esta página en <b>Safari</b>.</p><p>2. Toca <b>Compartir</b> y luego <b>Agregar a pantalla de inicio</b>.</p><p>3. Toca <b>Agregar</b>.</p><button id="pwaIosClose" type="button">Entendido</button></div></div>
-<script id="pwa-install-and-offline">
+<script id="pwa-install-helper">
 (function(){
   'use strict';
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function(){ navigator.serviceWorker.register('./sw.js').catch(function(){}); });
+  var deferredPrompt=null;
+  var card=document.getElementById('pwa-install-card');
+  var btn=document.getElementById('pwa-install-btn');
+  var later=document.getElementById('pwa-install-later');
+  var iosHelp=document.getElementById('pwa-ios-help');
+  var sub=document.getElementById('pwa-install-sub');
+  var ua=navigator.userAgent||'';
+  var isIOS=/iPad|iPhone|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  var isSafari=/Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  var standalone=window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
+  function show(){ if(!standalone && card) card.style.display='block'; }
+  function hide(){ if(card) card.style.display='none'; }
+  if(isIOS && isSafari && !standalone){
+    iosHelp.style.display='block';
+    btn.textContent='Ver cómo instalar';
+    sub.textContent='Agrégala a tu pantalla de inicio desde Safari.';
+    setTimeout(show,500);
+    btn.addEventListener('click',function(){ iosHelp.style.display='block'; });
   }
-  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  if (isStandalone) return;
-  var isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  var bar=document.getElementById('pwaInstallBar'), btn=document.getElementById('pwaInstallBtn'), close=document.getElementById('pwaInstallClose');
-  var help=document.getElementById('pwaIosHelp'), helpClose=document.getElementById('pwaIosClose'), sub=document.getElementById('pwaInstallSub');
-  var deferred=null;
-  function show(){ if(sessionStorage.getItem('pwa_install_dismissed')!=='1') bar.classList.add('show'); }
-  function hide(){ bar.classList.remove('show'); }
-  if(isiOS){ sub.textContent='Agrégala a tu pantalla de inicio desde Safari.'; setTimeout(show,1200); }
-  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred=e; setTimeout(show,500); });
-  window.addEventListener('appinstalled', function(){ deferred=null; hide(); });
-  btn.addEventListener('click', async function(){
-    if(isiOS){ help.classList.add('show'); help.setAttribute('aria-hidden','false'); return; }
-    if(!deferred){ sub.textContent='Abre el menú del navegador y elige “Instalar app”.'; return; }
-    var p=deferred; deferred=null; hide();
-    try{ await p.prompt(); await p.userChoice; }catch(_){ }
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault();
+    deferredPrompt=e;
+    btn.textContent='Instalar app';
+    iosHelp.style.display='none';
+    show();
   });
-  close.addEventListener('click',function(){ hide(); sessionStorage.setItem('pwa_install_dismissed','1'); });
-  helpClose.addEventListener('click',function(){ help.classList.remove('show'); help.setAttribute('aria-hidden','true'); });
+  btn.addEventListener('click',async function(){
+    if(!deferredPrompt) return;
+    try{
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+    }catch(e){}
+    deferredPrompt=null;
+    hide();
+  });
+  later.addEventListener('click',hide);
+  window.addEventListener('appinstalled',function(){ deferredPrompt=null; hide(); });
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(function(err){console.warn('SW:',err);});
+    });
+  }
 })();
 </script>
 
