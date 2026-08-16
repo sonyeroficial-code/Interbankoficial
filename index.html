@@ -3673,4 +3673,96 @@ html.ibk-ios-home-v4 body{
 })();
 </script>
 
+
+
+<!-- =========================================================
+     OPERACIONES iPHONE SAFE-AREA FIX V5
+     - Reserva el espacio de la barra de estado SOLO en iPhone/iPad.
+     - Mantiene el fondo verde detrás de la barra superior.
+     - Android conserva exactamente el CSS original.
+     ========================================================= -->
+<style id="ibk-iphone-operaciones-fix-v5">
+html.ibk-ios-ops-v5{
+  --ibk-ops-ios-top:48px;
+}
+
+/* La pantalla sigue ocupando el alto real disponible y conserva su scroll. */
+html.ibk-ios-ops-v5 app-operaciones .op-page{
+  min-height:100dvh!important;
+  height:100dvh!important;
+  background:#f3f3f3!important;
+}
+
+/*
+   El header verde es quien absorbe el status bar.
+   Sumamos el inset a SU altura para no comprimir el título ni el menú.
+*/
+html.ibk-ios-ops-v5 app-operaciones .op-header{
+  height:calc(9vh + var(--ibk-ops-ios-top))!important;
+  padding-top:var(--ibk-ops-ios-top)!important;
+  padding-left:5vw!important;
+  padding-right:5vw!important;
+  padding-bottom:0!important;
+  box-sizing:border-box!important;
+  background:#05bf4f!important;
+  margin-top:0!important;
+}
+
+/* Evita que alguna regla global vuelva a subir el contenido. */
+html.ibk-ios-ops-v5 app-operaciones{
+  display:block!important;
+  margin-top:0!important;
+  padding-top:0!important;
+  background:#05bf4f!important;
+}
+
+/* Safari/PWA: el área detrás del reloj/notch también queda verde. */
+html.ibk-ios-ops-v5,
+html.ibk-ios-ops-v5 body{
+  background:#05bf4f!important;
+}
+</style>
+<script id="ibk-iphone-operaciones-fix-script-v5">
+(function(){
+  'use strict';
+  var ua=navigator.userAgent||'';
+  var isiOS=/iPad|iPhone|iPod/i.test(ua) ||
+            (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  if(!isiOS) return;
+
+  document.documentElement.classList.add('ibk-ios-ops-v5');
+
+  function updateOpsInset(){
+    if(!document.body) return;
+    var probe=document.createElement('div');
+    probe.style.cssText='position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none;';
+    document.body.appendChild(probe);
+    var measured=probe.getBoundingClientRect().height||0;
+    probe.remove();
+    /* En algunos PWA/WebView iOS el env() devuelve 0 aunque la barra se superponga. */
+    var top=Math.max(48,Math.round(measured));
+    document.documentElement.style.setProperty('--ibk-ops-ios-top',top+'px');
+  }
+
+  function syncTheme(){
+    var ops=document.querySelector('app-operaciones');
+    if(!ops) return;
+    var cs=getComputedStyle(ops);
+    var visible=cs.display!=='none' && cs.visibility!=='hidden';
+    if(visible){
+      var meta=document.querySelector('meta[name="theme-color"]');
+      if(meta) meta.setAttribute('content','#05BF4F');
+    }
+  }
+
+  function run(){ updateOpsInset(); syncTheme(); }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',run,{once:true});
+  }else run();
+  window.addEventListener('pageshow',run);
+  window.addEventListener('orientationchange',function(){setTimeout(run,120)});
+  new MutationObserver(function(){requestAnimationFrame(syncTheme)}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+
 </body></html>
