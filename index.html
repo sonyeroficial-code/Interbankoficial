@@ -1660,6 +1660,29 @@ app-ibk-login .preCarga{display:flex!important}
   app-ibk-login .ibk-safe-banner{bottom:2.2vh!important;height:6.2vh!important;max-height:8vh!important}
 }
 </style>
+
+<!-- iPhone/iPad: evita sumar dos veces el safe-area en el login.
+     El layout V13 ya posiciona el header con env(safe-area-inset-top),
+     por eso el padding global anterior empujaba toda la pantalla hacia abajo en iOS. -->
+<script id="ibk-ios-login-layout-detect">
+(function(){
+  try{
+    var ua=navigator.userAgent||'';
+    var isIOS=/iPad|iPhone|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+    if(isIOS) document.documentElement.classList.add('ibk-ios');
+  }catch(e){}
+})();
+</script>
+<style id="ibk-ios-login-layout-fix">
+html.ibk-ios app-ibk-login .bienvenida-box{
+  padding-top:0!important;
+  padding-bottom:0!important;
+}
+html.ibk-ios app-ibk-login .bienvenida{
+  padding-top:0!important;
+}
+</style>
+
 <script id="ibk-login-safe-v13-script">
 (function(){
   function enhanceLogin(){
