@@ -3483,4 +3483,27 @@ html.ibk-android-scrollfix app-micuenta .mic-content::-webkit-scrollbar{
 })();
 </script>
 
+
+
+<!-- HOME iPHONE FINAL FIX V2: no depende del user-agent.
+     En Android env(safe-area-inset-top)=0, por eso Android queda igual. -->
+<style id="ibk-home-iphone-final-v2">
+/* El padding global de .bienvenida-box estaba creando la franja blanca en iPhone. */
+app-home .bienvenida-box,
+app-home .bienvenida-box.homeV142Ready{
+  padding-top:0!important;
+}
+
+/* El verde sí ocupa el área superior; los iconos respetan el notch dentro del header. */
+app-home .homeV142Top{
+  padding-top:env(safe-area-inset-top,0px)!important;
+  background:#05bf4f!important;
+}
+
+/* Evita cualquier separación heredada arriba del Home. */
+app-home .homeV142,
+app-home .homeV142Top{
+  margin-top:0!important;
+}
+</style>
 </body></html>
