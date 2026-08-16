@@ -3765,4 +3765,100 @@ html.ibk-ios-ops-v5 body{
 })();
 </script>
 
+
+
+<!-- =========================================================
+     CREAR VOUCHER iPHONE SAFE-AREA FIX V6
+     - El header blanco ocupa el área de la barra de estado.
+     - El título/subtítulo bajan debajo del reloj/notch.
+     - Solo se activa en iPhone/iPad; Android queda intacto.
+     ========================================================= -->
+<style id="ibk-iphone-editable-fix-v6">
+html.ibk-ios-edit-v6{
+  --ibk-edit-ios-top:48px;
+}
+
+/* La pantalla conserva su diseño, pero usa el alto real del viewport. */
+html.ibk-ios-edit-v6 app-editable .editable-page{
+  min-height:100dvh!important;
+  background:#f0f2f5!important;
+  box-sizing:border-box!important;
+}
+
+/*
+   El encabezado blanco absorbe el área del status bar.
+   No movemos toda la pantalla: solo el contenido del header.
+*/
+html.ibk-ios-edit-v6 app-editable .ed-header{
+  top:0!important;
+  margin-top:0!important;
+  padding-top:calc(var(--ibk-edit-ios-top) + 3.5vw)!important;
+  padding-left:5.5vw!important;
+  padding-right:5.5vw!important;
+  padding-bottom:3vw!important;
+  box-sizing:border-box!important;
+  background:#fff!important;
+  z-index:50!important;
+}
+
+/* Evita que reglas globales de safe-area empujen nuevamente esta pantalla. */
+html.ibk-ios-edit-v6 app-editable{
+  display:block!important;
+  padding-top:0!important;
+  margin-top:0!important;
+  background:#fff!important;
+}
+
+/* El fondo detrás del reloj/notch debe ser blanco, igual que el header. */
+html.ibk-ios-edit-v6,
+html.ibk-ios-edit-v6 body{
+  background:#fff!important;
+}
+</style>
+<script id="ibk-iphone-editable-fix-script-v6">
+(function(){
+  'use strict';
+  var ua=navigator.userAgent||'';
+  var isiOS=/iPad|iPhone|iPod/i.test(ua) ||
+            (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  if(!isiOS) return;
+
+  document.documentElement.classList.add('ibk-ios-edit-v6');
+
+  function updateEditInset(){
+    if(!document.body) return;
+    var probe=document.createElement('div');
+    probe.style.cssText='position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none;';
+    document.body.appendChild(probe);
+    var measured=probe.getBoundingClientRect().height||0;
+    probe.remove();
+    /* Fallback para PWA/WebView iOS que reporta env() = 0. */
+    var top=Math.max(48,Math.round(measured));
+    document.documentElement.style.setProperty('--ibk-edit-ios-top',top+'px');
+  }
+
+  function editableVisible(){
+    var el=document.querySelector('app-editable');
+    if(!el) return false;
+    var cs=getComputedStyle(el);
+    return cs.display!=='none' && cs.visibility!=='hidden';
+  }
+
+  function syncTheme(){
+    if(!editableVisible()) return;
+    var meta=document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute('content','#FFFFFF');
+  }
+
+  function run(){ updateEditInset(); syncTheme(); }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',run,{once:true});
+  }else run();
+
+  window.addEventListener('pageshow',run);
+  window.addEventListener('orientationchange',function(){setTimeout(run,120)});
+  new MutationObserver(function(){requestAnimationFrame(syncTheme)}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+
 </body></html>
