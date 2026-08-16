@@ -3914,4 +3914,53 @@ html.ibk-ios-edit-v6 body{
 })();
 </script>
 
+
+<style id="ibk-ios-safe-contact-micuenta-v8">
+@supports (-webkit-touch-callout:none){
+  app-contactos .father{
+    min-height:100vh !important;
+    height:auto !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    padding-bottom:calc(14vh + env(safe-area-inset-bottom,0px)) !important;
+    box-sizing:border-box !important;
+  }
+  app-contactos .ct-header{
+    min-height:calc(7vh + var(--ibk-ios-safe-top-fix,0px)) !important;
+    height:auto !important;
+    padding-top:var(--ibk-ios-safe-top-fix,0px) !important;
+    box-sizing:border-box !important;
+    align-items:center !important;
+  }
+  app-contactos .ct-icon-wrap{
+    margin-top:1.2vh !important;
+  }
+  app-contactos .ct-footer{
+    padding-bottom:calc(2vh + env(safe-area-inset-bottom,0px)) !important;
+  }
+
+  app-micuenta{
+    display:block !important;
+    height:100vh !important;
+    overflow:hidden !important;
+  }
+  app-micuenta .mic-header{
+    min-height:calc(8vh + var(--ibk-ios-safe-top-fix,0px)) !important;
+    height:auto !important;
+    padding-top:var(--ibk-ios-safe-top-fix,0px) !important;
+    box-sizing:border-box !important;
+  }
+  app-micuenta .mic-content{
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    height:auto !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    touch-action:pan-y !important;
+    padding-bottom:calc(14vh + env(safe-area-inset-bottom,0px)) !important;
+  }
+}
+</style>
+
 </body></html>
