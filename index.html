@@ -3599,4 +3599,78 @@ html.ibk-ios-home-v3 body{
 })();
 </script>
 
+
+
+<!-- =========================================================
+     HOME iPHONE FIX V4
+     En algunos iPhone/PWA env(safe-area-inset-top) devuelve 0 aunque
+     la barra de estado siga superpuesta. Reservamos un espacio iOS real
+     para el status bar y hacemos crecer el bloque verde, sin tocar Android.
+     ========================================================= -->
+<style id="ibk-iphone-home-fix-v4">
+html.ibk-ios-home-v4{
+  --ibk-home-ios-top:48px;
+}
+
+/* El contenedor no debe empujar TODO el Home. */
+html.ibk-ios-home-v4 app-home .bienvenida-box,
+html.ibk-ios-home-v4 app-home .bienvenida-box.homeV142Ready{
+  padding-top:0!important;
+  background:#05bf4f!important;
+  box-sizing:border-box!important;
+}
+
+/*
+   El espacio del status bar pertenece SOLO al encabezado verde.
+   Además aumentamos su altura en la misma cantidad para que la tarjeta
+   blanca empiece en la misma posición visual que en Android.
+*/
+html.ibk-ios-home-v4 app-home .homeV142Top{
+  height:calc(15vh + var(--ibk-home-ios-top))!important;
+  padding-top:var(--ibk-home-ios-top)!important;
+  margin-top:0!important;
+  background:#05bf4f!important;
+  box-sizing:border-box!important;
+}
+
+html.ibk-ios-home-v4 app-home .homeV142Topbar{
+  height:8vh!important;
+}
+
+html.ibk-ios-home-v4,
+html.ibk-ios-home-v4 body{
+  background:#05bf4f!important;
+}
+</style>
+<script id="ibk-iphone-home-fix-script-v4">
+(function(){
+  'use strict';
+  var ua=navigator.userAgent||'';
+  var isiOS=/iPad|iPhone|iPod/i.test(ua) ||
+            (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  if(!isiOS) return;
+
+  document.documentElement.classList.add('ibk-ios-home-v4');
+
+  /* Medimos el safe-area real. Si el WebView/PWA reporta 0, usamos 48px. */
+  function updateTopInset(){
+    var probe=document.createElement('div');
+    probe.style.cssText='position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none;';
+    document.body.appendChild(probe);
+    var measured=probe.getBoundingClientRect().height||0;
+    probe.remove();
+    var top=Math.max(48, Math.round(measured));
+    document.documentElement.style.setProperty('--ibk-home-ios-top', top+'px');
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',updateTopInset,{once:true});
+  }else{
+    updateTopInset();
+  }
+  window.addEventListener('orientationchange',function(){setTimeout(updateTopInset,120)});
+  window.addEventListener('pageshow',updateTopInset);
+})();
+</script>
+
 </body></html>
