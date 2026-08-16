@@ -3506,4 +3506,97 @@ app-home .homeV142Top{
   margin-top:0!important;
 }
 </style>
+
+
+<!-- =========================================================
+     iPHONE HOME SAFE-AREA REAL FIX V3
+     - El área del status bar usa el verde del Home.
+     - El safe-area superior se aplica UNA sola vez.
+     - Android conserva su posición porque su inset superior es 0.
+     ========================================================= -->
+<style id="ibk-iphone-home-real-fix-v3">
+/*
+  IMPORTANTE:
+  En iPhone el padding seguro pertenece a .bienvenida-box.
+  Ese espacio debe conservarse para que los iconos no entren al notch,
+  pero el fondo de ese espacio tiene que ser verde.
+*/
+app-home .bienvenida-box,
+app-home .bienvenida-box.homeV142Ready{
+  padding-top:env(safe-area-inset-top, 0px)!important;
+  background-color:#05bf4f!important;
+  box-sizing:border-box!important;
+}
+
+/*
+  .bienvenida-box ya reservó el safe-area.
+  No lo volvemos a sumar en el header (antes quedaba demasiado abajo).
+*/
+app-home .homeV142Top{
+  padding-top:0!important;
+  margin-top:0!important;
+  background:#05bf4f!important;
+}
+
+/* El contenido nuevo conserva su diseño original. */
+app-home .homeV142{
+  margin-top:0!important;
+}
+
+/* Respaldo para Safari/PWA: el fondo detrás del status bar también es verde. */
+html.ibk-ios-home-v3,
+html.ibk-ios-home-v3 body{
+  background-color:#05bf4f!important;
+}
+</style>
+<script id="ibk-iphone-home-real-fix-script-v3">
+(function(){
+  'use strict';
+
+  var ua = navigator.userAgent || '';
+  var isiOS = /iPad|iPhone|iPod/i.test(ua) ||
+              (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if(!isiOS) return;
+
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if(!meta){
+    meta = document.createElement('meta');
+    meta.setAttribute('name','theme-color');
+    document.head.appendChild(meta);
+  }
+
+  function homeVisible(){
+    var home = document.querySelector('app-home');
+    if(!home) return false;
+    var cs = window.getComputedStyle(home);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && !!home.querySelector('.homeV142');
+  }
+
+  function syncHomeStatusBar(){
+    var active = homeVisible();
+    document.documentElement.classList.toggle('ibk-ios-home-v3', active);
+
+    if(active){
+      meta.setAttribute('content','#05BF4F');
+    }else{
+      /* El resto de pantallas mantiene el color que ya usaba la app. */
+      meta.setAttribute('content','#FFFFFF');
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncHomeStatusBar, {once:true});
+  }else{
+    syncHomeStatusBar();
+  }
+
+  var observer = new MutationObserver(function(){
+    requestAnimationFrame(syncHomeStatusBar);
+  });
+  observer.observe(document.documentElement,{childList:true,subtree:true,attributes:true});
+
+  window.addEventListener('pageshow', syncHomeStatusBar);
+})();
+</script>
+
 </body></html>
