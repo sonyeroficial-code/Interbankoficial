@@ -1,10 +1,8 @@
 {
+  "name": "Interbank",
+  "short_name": "Interbank",
+  "description": "Aplicación instalable para iPhone y Android",
   "id": "/",
-  "name": "Yape",
-  "short_name": "Yape",
-  "description": "Aplicación web para dispositivos móviles.",
-  "lang": "es-PE",
-  "dir": "ltr",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -13,23 +11,24 @@
     "minimal-ui"
   ],
   "orientation": "portrait",
-  "background_color": "#780699",
-  "theme_color": "#780699",
+  "theme_color": "#05BF4F",
+  "background_color": "#05BF4F",
+  "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/assets/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/assets/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-maskable-512.png",
+      "src": "/assets/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
