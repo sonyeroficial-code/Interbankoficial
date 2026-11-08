@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05BF4F">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Interbank">
+  <meta name="description" content="Instrucciones para instalar la aplicación en tu celular">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+  <link rel="icon" href="./assets/icons/icon-192.png">
+  <title>Instalar Interbank</title>
+  <script src="./instalacion-acceso.js?v=ibk-1"></script>
+  <style>
+    :root{--green:#05bf4f;--dark-green:#008d42;--deep:#003d25;--ink:#15382b;--muted:#65776f;--line:#e0eee5;--page:#f4f9f6;--safe:env(safe-area-inset-bottom,0px)}
+    *,*::before,*::after{box-sizing:border-box}
+    html{min-height:100%;background:var(--page)}
+    body{margin:0;min-height:100vh;min-height:100dvh;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-tap-highlight-color:transparent}
+    [hidden]{display:none!important}
+    button,a{touch-action:manipulation}
+    button{font:inherit;cursor:pointer}
+    button:focus-visible,a:focus-visible{outline:3px solid #006f36;outline-offset:4px}
+    .app-wrap{width:min(100%,480px);margin:0 auto;padding-bottom:calc(22px + var(--safe))}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(146deg,#06c854 0%,#00a64b 60%,#008a42 100%);color:white;padding:calc(26px + env(safe-area-inset-top,0px)) 24px 34px;border-radius:0 0 32px 32px}
+    .hero::after{content:"";position:absolute;width:210px;height:210px;border:35px solid rgba(255,255,255,.085);border-radius:50%;right:-98px;top:-90px}
+    .brand{position:relative;z-index:1;display:flex;align-items:center;gap:10px;font-weight:850;font-size:23px;letter-spacing:-.8px}
+    .brand-mark{width:36px;height:36px;border-radius:12px;background:white;color:var(--dark-green);display:grid;place-items:center;font-size:26px;font-weight:900;font-style:italic}
+    .eyebrow{margin:30px 0 7px;font-size:11px;font-weight:800;letter-spacing:1.4px;opacity:.9}
+    .hero h1{position:relative;z-index:1;font-size:clamp(26px,6.8vw,34px);line-height:1.13;letter-spacing:-.8px;margin:0 0 11px}
+    .hero p:last-child{position:relative;z-index:1;margin:0;max-width:330px;color:rgba(255,255,255,.94);line-height:1.52;font-size:14px}
+    .content{padding:20px 18px 0}
+    .card{background:#fff;border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,77,39,.065);border-radius:23px;padding:20px 18px;margin-bottom:16px}
+    .platform-pill{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:7px 11px;background:#e9faee;color:#007a39;font-size:12px;font-weight:800}
+    .platform-pill svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+    .section-title{font-weight:800;font-size:19px;letter-spacing:-.4px;margin:14px 0 6px}
+    .lead{font-size:14px;color:var(--muted);line-height:1.5;margin:0 0 18px}
+    .stepper{display:flex;align-items:center;gap:12px;margin:15px 0 20px}
+    .stepper button{width:37px;height:37px;border-radius:50%;background:#eef5f0;border:2px solid #d9e9de;color:#7b9587;flex:none;font-size:15px;font-weight:800}
+    .stepper button[aria-current="step"]{background:var(--green);color:white;border-color:var(--green);box-shadow:0 5px 13px #05bf4f40}
+    .stepper .line{height:2px;background:#dcece1;flex:1}
+    .instruction{min-height:88px}
+    .instruction h3{font-size:17px;line-height:1.3;margin:0 0 7px}
+    .instruction p{font-size:14px;line-height:1.5;margin:0;color:var(--muted)}
+    .illustration{border:1px solid #d9efe1;border-radius:18px;background:linear-gradient(160deg,#f4fff6,#eaf9f0);min-height:142px;display:flex;align-items:center;justify-content:center;padding:18px;margin:4px 0 18px}
+    .share-icon{width:79px;height:79px;border-radius:24px;background:#fff;box-shadow:0 9px 24px #007c3021;display:grid;place-items:center;color:var(--dark-green)}
+    .share-icon svg{width:42px;height:42px;stroke:currentColor;stroke-width:2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+    .ios-menu{width:100%;max-width:312px;background:white;border-radius:15px;box-shadow:0 8px 22px #007c301a;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:650;gap:12px}
+    .ios-menu .plus{height:31px;width:31px;display:grid;place-items:center;border:2px solid #008d42;color:#008d42;border-radius:9px;font-size:26px;font-weight:400}
+    .done-icon{width:70px;height:70px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:white;box-shadow:0 10px 23px #05bf4f44}
+    .done-icon svg{width:43px;height:43px;stroke:currentColor;stroke-width:3.5;fill:none;stroke-linejoin:round;stroke-linecap:round}
+    .primary,.secondary{width:100%;min-height:51px;border-radius:13px;border:0;display:flex;align-items:center;justify-content:center;gap:9px;padding:11px 14px;font-weight:800;font-size:15px}
+    .primary{background:var(--green);color:#fff;box-shadow:0 7px 18px #05bf4f29}
+    .primary:active{background:#00a846}
+    .primary:disabled{opacity:.6;cursor:wait}
+    .secondary{background:#edfaf1;color:#00813e;border:1px solid #d2ebda;margin-top:10px}
+    .action-note{padding:12px 14px;background:#eef8f1;border-radius:13px;color:#34664a;font-size:13px;line-height:1.45;margin:14px 0 0}
+    .support{display:flex;align-items:center;justify-content:center;gap:7px;padding:13px 0 5px;font-size:14px;font-weight:750;color:#008d42;text-decoration:none}
+    .footer-note{text-align:center;color:#7d9588;font-size:12px;line-height:1.45;margin:12px 10px}
+    dialog{border:0;border-radius:18px;background:#fff;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 30px);padding:0;overflow:auto;box-shadow:0 20px 70px #002b1ba3}
+    dialog::backdrop{background:rgba(0,34,18,.76)}
+    .dialog-bar{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;gap:12px;font-size:16px;font-weight:800}
+    .dialog-close{width:36px;height:36px;border:0;background:#eff5f1;border-radius:50%;font-size:25px;color:#365c49}
+    dialog video{width:100%;display:block;max-height:calc(100dvh - 126px);background:#000}
+    .desktop{max-width:480px;margin:13vh auto 0;text-align:center;padding:18px}
+    .desktop .share-icon{margin:0 auto 20px}
+    @media(max-width:360px){.hero{padding-left:19px;padding-right:19px}.content{padding-left:12px;padding-right:12px}.card{padding:18px 15px}.stepper{gap:8px}.hero h1{font-size:27px}}
+    @media(min-height:840px){.hero{padding-bottom:44px}.content{padding-top:24px}}
+  </style>
+</head>
+<body>
+  <main class="app-wrap" id="mobileInstall" hidden>
+    <header class="hero">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">i</span><span>Interbank</span></div>
+      <p class="eyebrow">EN TU CELULAR</p>
+      <h1>Instala tu app<br>en un momento</h1>
+      <p>Accede desde el ícono de tu pantalla de inicio con una experiencia cómoda y a pantalla completa.</p>
+    </header>
+    <section class="content">
+      <div class="card" id="iosGuide" hidden>
+        <span class="platform-pill">● Instalación para iPhone</span>
+        <h2 class="section-title">Solo sigue estos 3 pasos</h2>
+        <p class="lead" id="iosBrowserNote" hidden>Para instalarla, abre este enlace en Safari.</p>
+        <div class="stepper" role="group" aria-label="Pasos para instalar">
+          <button type="button" data-step="1" aria-current="step" aria-label="Paso 1">1</button><span class="line"></span>
+          <button type="button" data-step="2" aria-label="Paso 2">2</button><span class="line"></span>
+          <button type="button" data-step="3" aria-label="Paso 3">3</button>
+        </div>
+        <div class="instruction" aria-live="polite"><h3 id="stepTitle">1. Toca Compartir</h3><p id="stepDescription">En Safari, pulsa el botón Compartir de la barra inferior.</p></div>
+        <div class="illustration" aria-hidden="true">
+          <div id="stepArt1" class="share-icon"><svg viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M5 12v9h14v-9"/></svg></div>
+          <div id="stepArt2" class="ios-menu" hidden><span>Agregar a pantalla de inicio</span><span class="plus">+</span></div>
+          <div id="stepArt3" class="done-icon" hidden><svg viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></svg></div>
+        </div>
+        <button id="nextStep" type="button" class="primary">Siguiente paso <span aria-hidden="true">→</span></button>
+        <button id="openTutorial" type="button" class="secondary">▶ Ver tutorial en video</button>
+      </div>
+      <div class="card" id="androidGuide" hidden>
+        <span class="platform-pill"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0M7 8h10v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2zM4 9v7m16-7v7M9 4 7 2m8 2 2-2"/></svg> Instalación para Android</span>
+        <h2 class="section-title">Lista para tu pantalla de inicio</h2>
+        <p class="lead">Pulsa el botón para instalar Interbank en tu celular.</p>
+        <button id="installAndroid" type="button" class="primary">Instalar app</button>
+        <p class="action-note" role="status" id="androidStatus" hidden></p>
+      </div>
+      <a class="support" href="https://t.me/bebote19" target="_blank" rel="noopener noreferrer">¿Necesitas ayuda? Escríbenos por Telegram ↗</a>
+      <p class="footer-note">Al terminar la instalación, abre la app desde el nuevo ícono en tu pantalla de inicio.</p>
+    </section>
+  </main>
+
+  <section id="desktopGuide" class="desktop" hidden>
+    <div class="share-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 3h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm2 15h4"/></svg></div>
+    <h1>Abre el enlace en tu celular</h1><p>Esta guía está preparada para instalar la app desde iPhone o Android.</p>
+    <a class="support" href="./index.html">Volver a la aplicación</a>
+  </section>
+
+  <dialog id="videoDialog" aria-label="Tutorial de instalación para iPhone">
+    <div class="dialog-bar"><span>Cómo instalar en iPhone</span><button type="button" id="closeTutorial" class="dialog-close" aria-label="Cerrar">×</button></div>
+    <video id="tutorialVideo" controls playsinline preload="none" data-src="./tutorial-iphone.mp4">Tu navegador no permite reproducir este video.</video>
+  </dialog>
+
+  <script>
+  (function () {
+    'use strict';
+    var device = window.IBKInstallAccess.detect();
+    if (device.standalone) {
+      location.replace(new URL('./index.html' + location.search + location.hash, location.href).href);
+      return;
+    }
+    document.getElementById(device.mobile ? 'mobileInstall' : 'desktopGuide').hidden = false;
+    document.getElementById('iosGuide').hidden = !device.ios;
+    document.getElementById('androidGuide').hidden = !device.android;
+
+    if (device.ios) {
+      var safari = /Safari/i.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
+      document.getElementById('iosBrowserNote').hidden = safari;
+      var step = 1;
+      var steps = [
+        ['1. Toca Compartir', 'En Safari, pulsa el botón Compartir de la barra inferior.'],
+        ['2. Agrega a pantalla de inicio', 'Desliza las opciones y elige «Agregar a pantalla de inicio».'],
+        ['3. Confirma la instalación', 'Toca «Agregar» y abre la aplicación desde su nuevo ícono.']
+      ];
+      function renderStep() {
+        document.getElementById('stepTitle').textContent = steps[step - 1][0];
+        document.getElementById('stepDescription').textContent = steps[step - 1][1];
+        document.querySelectorAll('[data-step]').forEach(function (button) {
+          if (Number(button.dataset.step) === step) button.setAttribute('aria-current', 'step');
+          else button.removeAttribute('aria-current');
+        });
+        for (var i = 1; i <= 3; i++) document.getElementById('stepArt' + i).hidden = i !== step;
+        document.getElementById('nextStep').textContent = step === 3 ? 'Volver al primer paso' : 'Siguiente paso →';
+      }
+      document.querySelectorAll('[data-step]').forEach(function (button) {
+        button.addEventListener('click', function () { step = Number(button.dataset.step); renderStep(); });
+      });
+      document.getElementById('nextStep').addEventListener('click', function () { step = step === 3 ? 1 : step + 1; renderStep(); });
+    }
+
+    var videoDialog = document.getElementById('videoDialog');
+    var video = document.getElementById('tutorialVideo');
+    document.getElementById('openTutorial').addEventListener('click', function () {
+      if (!video.src) { video.src = video.dataset.src; video.load(); }
+      videoDialog.showModal();
+      var playback = video.play();
+      if (playback && playback.catch) playback.catch(function () {});
+    });
+    document.getElementById('closeTutorial').addEventListener('click', function () { videoDialog.close(); });
+    videoDialog.addEventListener('close', function () { video.pause(); });
+    videoDialog.addEventListener('cancel', function () { video.pause(); });
+
+    var promptEvent = null;
+    var androidButton = document.getElementById('installAndroid');
+    var androidStatus = document.getElementById('androidStatus');
+    function status(message) { androidStatus.hidden = false; androidStatus.textContent = message; }
+    window.addEventListener('beforeinstallprompt', function (event) {
+      if (!device.android) return;
+      event.preventDefault();
+      promptEvent = event;
+    });
+    window.addEventListener('appinstalled', function () { promptEvent = null; status('App instalada. Ábrela desde tu pantalla de inicio.'); });
+    androidButton.addEventListener('click', async function () {
+      if (!promptEvent) {
+        status('Si no aparece la instalación, abre el menú ⋮ de Chrome y selecciona «Instalar app» o «Agregar a pantalla de inicio».');
+        return;
+      }
+      androidButton.disabled = true;
+      try {
+        var event = promptEvent;
+        promptEvent = null;
+        await event.prompt();
+        var choice = await event.userChoice;
+        status(choice.outcome === 'accepted' ? 'Instalación solicitada. Abre la app desde su ícono.' : 'Puedes instalarla después desde el menú ⋮ de Chrome.');
+      } catch (_) { status('No se pudo abrir la instalación. Prueba desde el menú ⋮ de Chrome.'); }
+      finally { androidButton.disabled = false; }
+    });
+  }());
+  </script>
+</body>
+</html>

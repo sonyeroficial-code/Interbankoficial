@@ -1,0 +1,29 @@
+IBK V4 - INSTALACION EN PANTALLA SEPARADA
+
+La pantalla completa de instalacion esta en instalar.html.
+El archivo index.html conserva la aplicacion y solo carga
+instalacion-acceso.js para detectar el dispositivo.
+
+PARA ACTUALIZAR EN VERCEL O EN TU HOSTING:
+1. Copia los archivos de este ZIP a la RAIZ de tu proyecto.
+2. Mantiene tu carpeta assets/ original, que ya contiene los iconos.
+3. No borres los demas archivos que utiliza la aplicacion.
+4. Despliega la nueva version por HTTPS.
+
+ARCHIVOS:
+- index.html: tu app con la antigua ventanita de instalacion retirada.
+- instalar.html: pantalla Interbank, blanco y verde, independiente.
+- instalacion-acceso.js: redirige a la guia solo en navegador movil.
+- sw.js: actualizacion de cache para los archivos de instalacion.
+- manifest.webmanifest: configuracion de la app instalable.
+- tutorial-iphone.mp4: video disponible desde la guia de iPhone.
+
+COMPORTAMIENTO:
+- iPhone desde Safari: se muestran tres pasos para agregar al inicio.
+- Android desde Chrome: boton Instalar app y ayuda manual si hace falta.
+- App ya instalada y abierta desde el icono: entra directamente a index.
+- PC y entorno de edicion local: siguen accediendo a index sin redireccion.
+- Soporte: https://t.me/bebote19
+
+IMPORTANTE: La instalacion depende de los iconos y assets existentes,
+y del soporte del navegador. No se incluyen esos recursos en este parche.
