@@ -6437,79 +6437,91 @@ html.ibk-iphone app-ibk-login .bienvenida-box .preCarga {
 html.ibk-iphone app-ibk-login input.clave {font-size:max(16px, calc(2.05 * var(--ibk-login-unit)))!important;}
 html.ibk-iphone app-ibk-login .ibk-safe-version {bottom:calc(var(--ibk-login-bottom) + 1.55 * var(--ibk-login-unit));}
 
-/* Status color follows the visible route, including native safe areas. */
-html.ibk-iphone, html.ibk-iphone body {
-  background:var(--ibk-ios-screen-color, #05bf4f)!important;
+/* The page background supplies the tint even before a component mounts. */
+html.ibk-iphone, html.ibk-iphone body {background:var(--ibk-ios-screen-color,#05bf4f)!important;}
+html.ibk-iphone #ibk-iphone-status-fill {
+  position:fixed;inset:0 0 auto;height:max(48px,var(--ibk-ios-inset-top));
+  background:var(--ibk-ios-screen-color,#05bf4f);pointer-events:none;z-index:-1;
 }
-html.ibk-iphone-login body {
-  position:fixed!important;inset:0!important;width:100%!important;
+/* The visible login viewport can move independently of the layout viewport in WebKit. */
+html.ibk-iphone-login body {position:static!important;}
+html.ibk-iphone-login app-ibk-login .bienvenida-box {
+  position:absolute!important;top:var(--ibk-login-page-top,0px)!important;bottom:auto!important;
+  height:var(--ibk-login-view-height,100svh)!important;
 }
-#ibk-iphone-status-fill {
-  position:fixed;top:0;left:0;right:0;
-  height:var(--ibk-ios-inset-top, 0px);
-  background:var(--ibk-ios-screen-color, #05bf4f);
-  z-index:2147483646;pointer-events:none;
+html.ibk-iphone-login app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center {
+  /* Leave just enough room for the field and submit button when typing. */
+  --login-hero-share:57;
+  --login-hero-height:min(calc(var(--login-hero-share) * var(--ibk-login-unit)),max(calc(9 * var(--ibk-login-unit)),calc(var(--ibk-login-view-height,100svh) - var(--ibk-login-top) - var(--ibk-login-actions-height,0px))));
+  flex:0 0 var(--login-hero-height)!important;height:var(--login-hero-height)!important;
 }
-/* Only the sheet moves above the keyboard. Header and text sizes stay fixed. */
-html.ibk-iphone.ibk-iphone-login-keyboard app-ibk-login .bienvenida-box > div:nth-child(2) {
-  position:absolute!important;
-  left:0!important;right:0!important;
-  top:var(--ibk-login-sheet-top)!important;bottom:auto!important;
-  height:calc(var(--ibk-login-visible-height) - var(--ibk-login-sheet-top))!important;
-  min-height:0!important;
-  overflow-y:auto!important;
-  z-index:3!important;
+html.ibk-iphone-login app-ibk-login .bienvenida-box > div:nth-child(2) {
+  position:relative!important;inset:auto!important;flex:1 1 0!important;
+  min-height:0!important;height:auto!important;overflow-y:auto!important;overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
 }
-html.ibk-iphone.ibk-iphone-login-keyboard app-ibk-login .contraseña {
-  height:auto!important;
-  min-height:calc(43 * var(--ibk-login-unit))!important;
+html.ibk-iphone-login app-ibk-login .contraseña {min-height:calc(43 * var(--ibk-login-unit))!important;}
+html.ibk-iphone-login app-ibk-login .contraseña > .flex.flex-column {min-height:calc(43 * var(--ibk-login-unit))!important;}
+html.ibk-iphone-login app-ibk-login .ibk-safe-version {display:none!important;}
+html.ibk-iphone-login app-ibk-login .contraseña > .flex.flex-column::after {
+  content:'v23.2';position:absolute;left:0;right:0;bottom:calc(1.55 * var(--ibk-login-unit));
+  font-size:calc(1.15 * var(--ibk-login-unit));color:#999;text-align:center;pointer-events:none;
 }
-html.ibk-iphone.ibk-iphone-login-keyboard app-ibk-login .contraseña > .flex.flex-column {
-  height:calc(43 * var(--ibk-login-unit))!important;
+html.ibk-iphone-login[data-login-tight] app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center > .finFl,
+html.ibk-iphone-login[data-login-tight] app-ibk-login .ibk-safe-banner {visibility:hidden!important;}
+@media(orientation:landscape){
+  html.ibk-iphone-login app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center {--login-hero-share:52;}
 }
-/* Version and recovery link share the sheet's scrolling coordinate space. */
-html.ibk-iphone app-ibk-login .ibk-safe-version {display:none!important;}
-html.ibk-iphone app-ibk-login .contraseña > .flex.flex-column::after {
-  content:'v23.2';position:absolute;left:0;right:0;
-  bottom:calc(1.55 * var(--ibk-login-unit));
-  text-align:center;color:#999;font-size:calc(1.15 * var(--ibk-login-unit));
-  pointer-events:none;
-}
-/* Replace the original unconditional env() padding with the effective inset. */
-html.ibk-iphone .bienvenida-box,
-html.ibk-iphone .pantalla {
-  padding-top:var(--ibk-ios-inset-top)!important;
-  padding-bottom:var(--ibk-ios-inset-bottom)!important;
-}
-html.ibk-iphone .header-left, html.ibk-iphone .header-icon, html.ibk-iphone .ab-header {
-  padding-top:var(--ibk-ios-inset-top);
-}
-/* Replace the old 48px constants with the effective, single inset. */
-html.ibk-iphone app-home .bienvenida-box,
+/* Home keeps its controls below the status area, including while scrolling. */
 html.ibk-iphone app-home .bienvenida-box.homeV142Ready {padding-top:0!important;}
 html.ibk-iphone app-home .homeV142Top {
-  height:calc(15vh + var(--ibk-ios-inset-top))!important;
-  padding-top:var(--ibk-ios-inset-top)!important;box-sizing:border-box!important;
+  --home-safe:max(env(safe-area-inset-top,0px),var(--ibk-ios-inset-top));
+  height:calc(15vh + var(--home-safe))!important;padding:0!important;
 }
-html.ibk-iphone app-operaciones .op-header {
-  height:calc(9vh + var(--ibk-ios-inset-top))!important;
-  padding-top:var(--ibk-ios-inset-top)!important;box-sizing:border-box!important;
-}
-html.ibk-iphone app-editable .ed-header {
-  padding-top:calc(3.5vw + var(--ibk-ios-inset-top))!important;
+html.ibk-iphone app-home .homeV142Topbar {
+  position:fixed;inset:0 0 auto;z-index:3;box-sizing:border-box;
+  height:calc(8vh + var(--home-safe))!important;padding-top:var(--home-safe)!important;background:#05bf4f;
 }
 html.ibk-iphone app-opciones .ibk-opciones-cabecera {
+  position:sticky;top:0;background:#00c454;
   flex-basis:calc(9.2vh + var(--ibk-ios-inset-top))!important;
   padding-top:var(--ibk-ios-inset-top)!important;
 }
-@media (orientation:landscape) {
-  html.ibk-iphone app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center {
-    flex-basis:calc(52 * var(--ibk-login-unit))!important;
-    height:calc(52 * var(--ibk-login-unit))!important;
-  }
+html.ibk-iphone app-operaciones .op-header {
+  height:calc(9vh + var(--ibk-ios-inset-top))!important;padding-top:var(--ibk-ios-inset-top)!important;box-sizing:border-box!important;
 }
+html.ibk-iphone app-editable .ed-header {padding-top:calc(3.5vw + var(--ibk-ios-inset-top))!important;}
+/* All payment controls occupy their own rows. Safe-area padding belongs to the scroll area. */
+html.ibk-iphone .bienvenida-box.plin-pago-activo {overflow:hidden!important;padding:0!important;background:#fff!important;}
+html.ibk-iphone .bienvenida-box.plin-pago-activo .plin-pago-paso {
+  --plin-unit:clamp(6.4px,1svh,9.6px);
+  position:absolute!important;inset:0!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-areas:'heading' 'person' 'cards' '.' 'amount' 'destination' '.' 'message' 'favorite' 'balance' 'submit';
+  grid-template-rows:auto auto auto minmax(0,1fr) auto auto minmax(0,1fr) auto auto auto auto;
+  align-items:center!important;align-content:stretch!important;justify-content:stretch!important;
+  row-gap:clamp(6px,1svh,12px);width:100%!important;height:100%!important;min-height:0!important;
+  padding:calc(var(--ibk-ios-inset-top) + 1.6svh) 4vw max(12px,var(--ibk-ios-inset-bottom))!important;
+  box-sizing:border-box!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;
+}
+html.ibk-iphone .plin-pago-paso > :is(.plin-pago-cabecera,.plin-receptor-original,.plin-pago-tarjetas,.plin-monto-original,.plin-destino-original,.plin-pago-mensaje,.plin-pago-favorito,.plin-pago-saldo,.plin-boton-original) {
+  position:static!important;inset:auto!important;margin:0!important;width:100%!important;box-sizing:border-box!important;
+}
+html.ibk-iphone .plin-pago-cabecera {grid-area:heading;}
+html.ibk-iphone .plin-receptor-original {grid-area:person;}
+html.ibk-iphone .plin-pago-tarjetas {grid-area:cards;}
+html.ibk-iphone .plin-monto-original {grid-area:amount;}
+html.ibk-iphone .plin-destino-original {grid-area:destination;}
+html.ibk-iphone .plin-pago-mensaje {grid-area:message;}
+html.ibk-iphone .plin-pago-favorito {grid-area:favorite;}
+html.ibk-iphone .plin-pago-saldo {grid-area:balance;}
+html.ibk-iphone .plin-boton-original {grid-area:submit;}
+html.ibk-iphone-login app-ibk-login .ibk-safe-header {
+  position:fixed;inset:0 0 auto;width:100%;height:calc(var(--ibk-login-top) + 7.9 * var(--ibk-login-unit));
+  padding:calc(var(--ibk-login-top) + 2.4 * var(--ibk-login-unit)) 5.2vw 0;
+  box-sizing:border-box;background:#05bf4f;z-index:1;
+}
+html.ibk-iphone-login app-ibk-login .preCarga {z-index:2;}
 </style>
 
 
@@ -6521,7 +6533,7 @@ html.ibk-iphone app-opciones .ibk-opciones-cabecera {
   var installed=root.classList.contains('ibk-iphone-installed');
   var baseHeight=window.innerHeight, baseWidth=window.innerWidth;
   var safeTop=0,safeBottom=0,probe,fill,observer;
-  var frame=0,timer=0,lastFocus=0,loginActive=false;
+  var frame=0,timer=0,loginActive=false,keyboardOpen=false;
   var portrait=matchMedia('(orientation: portrait)').matches;
   var colors={
     'app-ibk-login':'#05bf4f','app-home':'#05bf4f','app-plin':'#05bf4f',
@@ -6555,6 +6567,11 @@ html.ibk-iphone app-opciones .ibk-opciones-cabecera {
   }
   function screenColor(screen){
     if(!screen) return root.style.getPropertyValue('--ibk-ios-screen-color') || '#05bf4f';
+    // Each Plin step shares an Angular host but has its own background.
+    var paymentSteps=screen.querySelectorAll('.plin-pago-paso, .plin-contactos-pantalla');
+    if(Array.prototype.some.call(paymentSteps,visible)) return '#ffffff';
+    var receipt=screen.querySelector('.plin-demo-hero');
+    if(visible(receipt)) return getComputedStyle(receipt).backgroundColor;
     var tag=screen.tagName.toLowerCase();
     var selector=headers[tag] || 'header,[class$="-header"],[class$="-cabecera"]';
     var header=screen.querySelector(selector);
@@ -6601,29 +6618,45 @@ html.ibk-iphone app-opciones .ibk-opciones-cabecera {
   }
   function sync(){
     frame=0;
+    if(!probe) return;
     var screen=activeScreen();
     paint(screen);
     var isLogin=!!screen && screen.tagName.toLowerCase()==='app-ibk-login';
-    var entered=isLogin&&!loginActive;
+    var wasLogin=loginActive;
     loginActive=isLogin;
     toggle('ibk-iphone-login',isLogin);
-    var isFocused=focused();
-    var visibleHeight=viewport?viewport.height:window.innerHeight;
-    var keyboard=isLogin && visibleHeight<baseHeight-120 && (isFocused || Date.now()-lastFocus<1200);
-    // Keep the base geometry while the keyboard animates or closes.
-    if(!keyboard && !isFocused){baseHeight=window.innerHeight;baseWidth=window.innerWidth;}
-    var insets=measure();
-    set('--ibk-login-height',baseHeight+'px');
-    toggle('ibk-iphone-login-keyboard',keyboard);
-    if(keyboard){
-      var unit=(baseHeight-insets.top-insets.bottom)/100;
-      var sheetTop=Math.max(insets.top+10*unit,visibleHeight-43*unit-insets.bottom);
-      set('--ibk-login-visible-height',Math.round(visibleHeight)+'px');
-      set('--ibk-login-sheet-top',Math.round(sheetTop)+'px');
+    var hasFocus=focused();
+    var viewHeight=viewport ? viewport.height : window.innerHeight;
+    var resizedWidth=Math.abs(window.innerWidth-baseWidth)>60;
+    if(!isLogin || !wasLogin || resizedWidth) {
+      baseHeight=window.innerHeight;
+      baseWidth=window.innerWidth;
+      keyboardOpen=false;
     }
-    // The document never needs to scroll in login; only the sheet can scroll.
-    // Undo WebKit's automatic page pan after the sheet is in its visible position.
-    if(isLogin && (entered || window.scrollX || window.scrollY)) window.scrollTo(0,0);
+    keyboardOpen=isLogin && !resizedWidth && (hasFocus || keyboardOpen) && baseHeight-viewHeight>100;
+    if(!keyboardOpen && !hasFocus) baseHeight=window.innerHeight;
+    var insets=measure();
+    set('--ibk-login-height',Math.round(baseHeight)+'px');
+    if(!isLogin){
+      if(wasLogin && window.scrollY) window.scrollTo(0,0);
+      root.removeAttribute('data-login-tight');
+      return;
+    }
+    set('--ibk-login-view-height',Math.round(viewHeight)+'px');
+    var pageTop=viewport && Number.isFinite(viewport.pageTop) ? viewport.pageTop : window.scrollY;
+    set('--ibk-login-page-top',Math.round(Math.max(0,pageTop))+'px');
+    var needed=0;
+    if(keyboardOpen){
+      var sheet=screen.querySelector('.bienvenida-box > div:nth-child(2)');
+      var submit=screen.querySelector('.btnIngresar');
+      if(sheet && submit){
+        needed=Math.ceil(submit.getBoundingClientRect().bottom-sheet.getBoundingClientRect().top+sheet.scrollTop+12);
+      }
+    }
+    set('--ibk-login-actions-height',Math.max(0,needed)+'px');
+    var tight=keyboardOpen && viewHeight-insets.top-needed<(baseHeight-insets.top-insets.bottom)*0.30;
+    root.toggleAttribute('data-login-tight',tight);
+    if(!hasFocus && !keyboardOpen && window.scrollY) window.scrollTo(0,0);
   }
   function schedule(){if(!frame) frame=requestAnimationFrame(sync);}
   function settled(){schedule();clearTimeout(timer);timer=setTimeout(schedule,350);}
@@ -6636,9 +6669,9 @@ html.ibk-iphone app-opciones .ibk-opciones-cabecera {
     observer=new MutationObserver(function(records){
       // Color changes are observed only inside the routed app; own meta/style
       // writes never schedule another pass.
-      if(records.length){paint(activeScreen());schedule();}
+      if(records.length) schedule();
     });
-    observer.observe(document.querySelector('app-root')||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style','hidden']});
+    observer.observe(document.querySelector('app-root')||document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','hidden']});
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});else start();
   window.addEventListener('pageshow',settled);
@@ -6648,8 +6681,8 @@ html.ibk-iphone app-opciones .ibk-opciones-cabecera {
   window.addEventListener('hashchange',settled);
   window.addEventListener('popstate',settled);
   document.addEventListener('visibilitychange',function(){if(!document.hidden) settled();});
-  document.addEventListener('focusin',function(){if(focused()) lastFocus=Date.now();settled();});
-  document.addEventListener('focusout',function(){lastFocus=Date.now();settled();});
+  document.addEventListener('focusin',settled);
+  document.addEventListener('focusout',settled);
   if(viewport){viewport.addEventListener('resize',settled,{passive:true});viewport.addEventListener('scroll',schedule,{passive:true});}
 })();
 </script>
