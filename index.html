@@ -8,6 +8,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
 
   <meta name="theme-color" content="#FFFFFF">
+<script id="ibk-iphone-login-boot">
+(function(){
+  var iphone=/iPhone|iPod/i.test(navigator.userAgent||'');
+  if(!iphone) return;
+  var root=document.documentElement;
+  root.classList.add('ibk-iphone');
+  var installed=navigator.standalone===true || window.matchMedia('(display-mode: standalone)').matches;
+  if(installed) root.classList.add('ibk-iphone-installed');
+  root.style.setProperty('--ibk-login-height',window.innerHeight+'px');
+  // Only an installed app can put its status bar over the web content.
+  // Keep a safe initial inset while WebKit initializes env() on notched phones.
+  var portrait=window.matchMedia('(orientation: portrait)').matches;
+  var notched=Math.max(screen.width,screen.height)>=812 && Math.min(screen.width,screen.height)>=375;
+  root.style.setProperty('--ibk-login-initial-top',installed && portrait ? (notched ? '62px' : '20px') : '0px');
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#05BF4F');
+})();
+</script>
+
   <!-- Acceso móvil: guía de instalación con identidad visual Interbank. -->
   <script src="./instalacion-acceso.js?v=ibk-1"></script>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -4317,12 +4335,10 @@ html.ibk-ios-home-v3 body{
     var active = homeVisible();
     document.documentElement.classList.toggle('ibk-ios-home-v3', active);
 
-    if(active){
-      meta.setAttribute('content','#05BF4F');
-    }else{
-      /* El resto de pantallas mantiene el color que ya usaba la app. */
-      meta.setAttribute('content','#FFFFFF');
-    }
+    var login = document.querySelector('app-ibk-login');
+    var loginActive = document.documentElement.classList.contains('ibk-iphone') && login && getComputedStyle(login).display !== 'none' && getComputedStyle(login).visibility !== 'hidden';
+    var color = active || loginActive ? '#05BF4F' : '#FFFFFF';
+    if(meta.getAttribute('content') !== color) meta.setAttribute('content',color);
   }
 
   if(document.readyState === 'loading'){
@@ -6073,4 +6089,437 @@ app-transf-editado .bienvenida-box.plin-demo-active > :not(.plin-demo-receipt) {
   schedule();
 })();
 </script>
+<style id="ibk-iphone-login-stable-layout">
+/* iPhone login: one viewport, one top inset, and a green status-bar backing. */
+html.ibk-iphone {
+  --ibk-login-top: max(env(safe-area-inset-top, 0px), var(--ibk-login-measured-top, var(--ibk-login-initial-top, 0px)));
+  --ibk-login-bottom: env(safe-area-inset-bottom, 0px);
+  --ibk-login-unit: calc((var(--ibk-login-height, 100svh) - var(--ibk-login-top) - var(--ibk-login-bottom)) / 100);
+}
+html.ibk-iphone-login, html.ibk-iphone-login body {
+  background:#05bf4f!important;
+  margin:0!important;
+  padding:0!important;
+  height:100%!important;
+  overflow:hidden!important;
+  overscroll-behavior:none;
+}
+html.ibk-iphone-login #splash {background:#05bf4f!important;}
+
+/* V13: ONLY html.ibk-iphone app-ibk-login. All other screens keep their original responsive CSS. */
+html.ibk-iphone app-ibk-login .bienvenida-box{
+  position:relative!important;
+  width:100%!important;
+  height:calc(100 * var(--ibk-login-unit))!important;
+  height:calc(100 * var(--ibk-login-unit))!important;
+  min-height:calc(100 * var(--ibk-login-unit))!important;
+  overflow:hidden!important;
+  background:#05bf4f!important;
+}
+html.ibk-iphone app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center{
+  position:relative!important;
+  width:100%!important;
+  height:calc(57 * var(--ibk-login-unit))!important;
+  height:calc(57 * var(--ibk-login-unit))!important;
+  min-height:0!important;
+  padding:0!important;
+  margin:0!important;
+  background:#05bf4f!important;
+  box-sizing:border-box!important;
+}
+html.ibk-iphone app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center > .flex.justify-content-center.align-items-center.pt-2{
+  position:absolute!important;
+  left:0!important;right:0!important;
+  top:calc(2.2 * var(--ibk-login-unit))!important;
+  width:100%!important;
+  height:calc(6 * var(--ibk-login-unit))!important;
+  padding:0 5.5vw!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+}
+html.ibk-iphone app-ibk-login img.menu{display:none!important}
+html.ibk-iphone app-ibk-login .ibk-safe-header{
+  position:absolute;
+  top:calc(2.4 * var(--ibk-login-unit));
+  left:5.2vw;right:5.2vw;
+  height:calc(5.5 * var(--ibk-login-unit));
+  display:flex;align-items:center;justify-content:space-between;
+  pointer-events:none;
+}
+html.ibk-iphone app-ibk-login .ibk-safe-menu{
+  width:calc(5.3 * var(--ibk-login-unit));height:calc(5.3 * var(--ibk-login-unit));border-radius:50%;background:rgba(0,0,0,.18);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:calc(.55 * var(--ibk-login-unit));
+}
+html.ibk-iphone app-ibk-login .ibk-safe-menu i{display:block;width:calc(2.55 * var(--ibk-login-unit));height:calc(.26 * var(--ibk-login-unit));border-radius:2px;background:#fff}
+html.ibk-iphone app-ibk-login .ibk-safe-brand{display:flex;align-items:center;justify-content:center;height:calc(5.5 * var(--ibk-login-unit));min-width:0}
+html.ibk-iphone app-ibk-login .ibk-safe-brand img{height:calc(3.2 * var(--ibk-login-unit));width:auto;max-width:60vw;object-fit:contain;display:block}
+html.ibk-iphone app-ibk-login .ibk-safe-lock{width:calc(2.7 * var(--ibk-login-unit));height:calc(2.7 * var(--ibk-login-unit));object-fit:contain;filter:brightness(0) invert(1)}
+html.ibk-iphone app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center > .finFl{
+  position:absolute!important;
+  left:5vw!important;right:5vw!important;
+  top:28.5%!important;
+  width:auto!important;
+  height:auto!important;
+  padding:0!important;
+  margin:0!important;
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:baseline!important;
+  justify-content:center!important;
+  gap:calc(.65 * var(--ibk-login-unit))!important;
+}
+html.ibk-iphone app-ibk-login .bienvenida{color:#fff!important;font-family:Geometria-Light,Roboto,sans-serif!important;font-size:calc(3.2 * var(--ibk-login-unit))!important;line-height:1.15!important;font-weight:400!important;text-align:center!important}
+html.ibk-iphone app-ibk-login .bienvenida-name{color:#fff!important;font-family:Geometria-Bold,Geometria,Roboto,sans-serif!important;font-size:calc(3.2 * var(--ibk-login-unit))!important;line-height:1.15!important;font-weight:700!important;text-align:center!important;max-width:58vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.ibk-iphone app-ibk-login .opcionesPlin{display:none!important}
+html.ibk-iphone app-ibk-login .ibk-safe-banner{
+  position:absolute;
+  left:7.5vw;right:7.5vw;
+  bottom:calc(4.2 * var(--ibk-login-unit));
+  width:85vw;
+  height:calc(5.7 * var(--ibk-login-unit));
+  max-height:calc(7.2 * var(--ibk-login-unit));
+  box-sizing:border-box;
+  padding:calc(.4 * var(--ibk-login-unit)) 2.2vw calc(.4 * var(--ibk-login-unit)) 1.35vw;
+  border-radius:calc(999 * var(--ibk-login-unit));
+  background:#087c34;
+  display:flex;
+  align-items:center;
+  gap:2vw;
+  overflow:hidden;
+}
+html.ibk-iphone app-ibk-login .ibk-safe-banner-icon{
+  width:calc(4.65 * var(--ibk-login-unit));
+  height:calc(4.65 * var(--ibk-login-unit));
+  flex:0 0 calc(4.65 * var(--ibk-login-unit));
+  object-fit:contain;
+  display:block;
+}
+html.ibk-iphone app-ibk-login .ibk-safe-banner-text{
+  flex:1;
+  min-width:0;
+  color:#fff;
+  font-family:Geometria,Geometria-Medium,Arial,sans-serif;
+  font-size:calc(1.65 * var(--ibk-login-unit));
+  line-height:1.1;
+  font-weight:400;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+html.ibk-iphone app-ibk-login .ibk-safe-banner-arrow{
+  flex:0 0 auto;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  font-size:calc(3.05 * var(--ibk-login-unit));
+  line-height:1;
+  font-weight:300;
+  margin-left:auto;
+}
+/* El bloque nuevo respeta la precarga original: nunca se muestra encima del flash. */
+html.ibk-iphone app-ibk-login .ibk-safe-banner.ibk-banner-wait{display:none!important}
+html.ibk-iphone app-ibk-login .bienvenida-box > div:nth-child(2){
+  position:relative!important;
+  width:100%!important;
+  height:calc(43 * var(--ibk-login-unit))!important;
+  height:calc(43 * var(--ibk-login-unit))!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  background:#f7f7f7!important;
+  border-radius:calc(3.4 * var(--ibk-login-unit)) calc(3.4 * var(--ibk-login-unit)) 0 0!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+html.ibk-iphone app-ibk-login .contraseña{
+  position:relative!important;
+  width:100%!important;
+  height:100%!important;
+  margin:0!important;
+  padding:0!important;
+  display:block!important;
+  box-sizing:border-box!important;
+  background:transparent!important;
+}
+html.ibk-iphone app-ibk-login .contraseña > .flex.flex-column{
+  position:relative!important;
+  width:100%!important;
+  height:100%!important;
+  padding:calc(3.1 * var(--ibk-login-unit)) 5.3vw 0!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+}
+html.ibk-iphone app-ibk-login .ibk-safe-password{position:relative;width:100%;height:calc(6.3 * var(--ibk-login-unit))}
+html.ibk-iphone app-ibk-login input.clave{
+  display:block!important;width:100%!important;height:calc(6.3 * var(--ibk-login-unit))!important;min-height:0!important;
+  margin:0!important;padding:0 13.5vw 0 4.8vw!important;box-sizing:border-box!important;
+  border:calc(.16 * var(--ibk-login-unit)) solid #ddd!important;border-radius:calc(1.55 * var(--ibk-login-unit))!important;background:#fff!important;
+  color:#171717!important;font-size:calc(2.05 * var(--ibk-login-unit))!important;font-weight:400!important;outline:none!important;box-shadow:none!important;
+}
+html.ibk-iphone app-ibk-login input.clave::placeholder{color:#aaa!important;opacity:1!important;font-weight:400!important}
+html.ibk-iphone app-ibk-login .ibk-safe-eye{
+  position:absolute;right:2.6vw;top:50%;transform:translateY(-50%);
+  width:7vw;height:calc(4.8 * var(--ibk-login-unit));border:0;background:transparent;padding:0;margin:0;
+  display:flex;align-items:center;justify-content:center;
+}
+html.ibk-iphone app-ibk-login .ibk-safe-eye img{width:calc(2.65 * var(--ibk-login-unit));height:calc(2.65 * var(--ibk-login-unit));object-fit:contain}
+html.ibk-iphone app-ibk-login .contraseña .flex.align-items-center{
+  display:block!important;width:100%!important;margin:calc(2.1 * var(--ibk-login-unit)) 0 0!important;padding:0!important;
+}
+html.ibk-iphone app-ibk-login .btnIngresar{
+  display:block!important;width:100%!important;height:calc(6.3 * var(--ibk-login-unit))!important;min-height:0!important;
+  margin:0!important;padding:0!important;border:0!important;border-radius:calc(3.4 * var(--ibk-login-unit))!important;
+  background:#003daf!important;color:#fff!important;font-size:calc(2.22 * var(--ibk-login-unit))!important;font-weight:600!important;
+  line-height:calc(6.3 * var(--ibk-login-unit))!important;text-align:center!important;box-shadow:none!important;
+}
+html.ibk-iphone app-ibk-login span[style*="#D33333"]{display:block!important;margin-top:calc(.8 * var(--ibk-login-unit))!important;font-size:calc(1.5 * var(--ibk-login-unit))!important}
+html.ibk-iphone app-ibk-login span[style*="color:#0038a5"],html.ibk-iphone app-ibk-login span[style*="color: #0038a5"]{
+  position:absolute!important;left:0!important;right:0!important;bottom:calc(4.4 * var(--ibk-login-unit))!important;
+  display:block!important;width:100%!important;margin:0!important;color:#111!important;
+  font-size:calc(1.95 * var(--ibk-login-unit))!important;font-weight:600!important;text-align:center!important;cursor:pointer!important;
+}
+html.ibk-iphone app-ibk-login .ibk-safe-version{position:absolute;left:0;right:0;bottom:calc(1.55 * var(--ibk-login-unit));text-align:center;color:#999;font-size:calc(1.15 * var(--ibk-login-unit))}
+html.ibk-iphone app-ibk-login img[src*="banner-plinea-whatsapp-inferior"]{display:none!important}
+/* Original startup precarga stays original and is not replaced by another screen. */
+html.ibk-iphone app-ibk-login .preCarga{display:flex!important}
+@media (orientation:landscape){
+  html.ibk-iphone app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center{height:calc(52 * var(--ibk-login-unit))!important}
+  html.ibk-iphone app-ibk-login .bienvenida-box > div:nth-child(2){height:calc(48 * var(--ibk-login-unit))!important}
+  html.ibk-iphone app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center > .finFl{top:25%!important}
+  html.ibk-iphone app-ibk-login .ibk-safe-banner{bottom:calc(2.2 * var(--ibk-login-unit))!important;height:calc(6.2 * var(--ibk-login-unit))!important;max-height:calc(8 * var(--ibk-login-unit))!important}
+}
+
+html.ibk-iphone app-ibk-login .ibk-fingerprint-option{
+  width:100%!important;
+  box-sizing:border-box!important;
+  min-height:calc(7.2 * var(--ibk-login-unit))!important;
+  margin-top:calc(2.8 * var(--ibk-login-unit))!important;
+  padding:calc(1.25 * var(--ibk-login-unit)) calc(2.2 * var(--ibk-login-unit))!important;
+  border:calc(0.23 * var(--ibk-login-unit)) solid #cfd2d5!important;
+  border-radius:calc(1.55 * var(--ibk-login-unit))!important;
+  background:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:calc(2 * var(--ibk-login-unit))!important;
+  color:#151515!important;
+  cursor:pointer!important;
+  -webkit-tap-highlight-color:transparent!important;
+  user-select:none!important;
+}
+html.ibk-iphone app-ibk-login .ibk-fingerprint-left{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:calc(1.55 * var(--ibk-login-unit))!important;
+}
+html.ibk-iphone app-ibk-login .ibk-fingerprint-icon{
+  width:calc(3.1 * var(--ibk-login-unit))!important;
+  height:calc(3.1 * var(--ibk-login-unit))!important;
+  min-width:calc(3.1 * var(--ibk-login-unit))!important;
+  color:#121212!important;
+  display:block!important;
+  object-fit:contain!important;
+}
+html.ibk-iphone app-ibk-login .ibk-fingerprint-label{
+  font-family:Geometria-Light,Roboto,sans-serif!important;
+  font-size:calc(2.05 * var(--ibk-login-unit))!important;
+  line-height:1.15!important;
+  font-weight:500!important;
+  letter-spacing:0!important;
+  color:#171717!important;
+  white-space:nowrap!important;
+}
+html.ibk-iphone app-ibk-login .ibk-fingerprint-switch{
+  position:relative!important;
+  flex:0 0 auto!important;
+  width:calc(6.3 * var(--ibk-login-unit))!important;
+  height:calc(3.72 * var(--ibk-login-unit))!important;
+  min-width:50px!important;
+  min-height:30px!important;
+  max-width:60px!important;
+  max-height:37px!important;
+  box-sizing:border-box!important;
+  border:calc(0.2 * var(--ibk-login-unit)) solid #c7cbd1!important;
+  border-radius:999px!important;
+  background:#f2f3f5!important;
+  transition:background .18s ease,border-color .18s ease!important;
+}
+html.ibk-iphone app-ibk-login .ibk-fingerprint-knob{
+  position:absolute!important;
+  top:50%!important;
+  left:calc(0.32 * var(--ibk-login-unit))!important;
+  width:calc(3.02 * var(--ibk-login-unit))!important;
+  height:calc(3.02 * var(--ibk-login-unit))!important;
+  min-width:24px!important;
+  min-height:24px!important;
+  max-width:30px!important;
+  max-height:30px!important;
+  transform:translateY(-50%)!important;
+  border-radius:50%!important;
+  background:#97a0ad!important;
+  color:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-shadow:0 0 0 calc(.07 * var(--ibk-login-unit)) rgba(0,0,0,.06)!important;
+  transition:left .18s ease,background .18s ease,color .18s ease!important;
+}
+html.ibk-iphone app-ibk-login .ibk-fingerprint-knob svg{
+  width:calc(1.5 * var(--ibk-login-unit))!important;
+  height:calc(1.5 * var(--ibk-login-unit))!important;
+  min-width:12px!important;
+  min-height:12px!important;
+  display:block!important;
+}
+html.ibk-iphone app-ibk-login .ibk-fingerprint-option[data-enabled="true"] .ibk-fingerprint-switch{
+  background:#17181f!important;
+  border-color:#17181f!important;
+}
+html.ibk-iphone app-ibk-login .ibk-fingerprint-option[data-enabled="true"] .ibk-fingerprint-knob{
+  left:calc(100% - calc(3.34 * var(--ibk-login-unit)))!important;
+  background:#ffffff!important;
+  color:#17181f!important;
+}
+@media (max-height:680px){
+  html.ibk-iphone app-ibk-login .ibk-fingerprint-option{margin-top:calc(1.7 * var(--ibk-login-unit))!important;min-height:54px!important;padding:calc(1 * var(--ibk-login-unit)) calc(1.8 * var(--ibk-login-unit))!important;}
+  html.ibk-iphone app-ibk-login .ibk-fingerprint-label{font-size:calc(1.9 * var(--ibk-login-unit))!important;}
+}
+@media (max-width:360px){
+  html.ibk-iphone app-ibk-login .ibk-fingerprint-label{font-size:calc(1.82 * var(--ibk-login-unit))!important;}
+  html.ibk-iphone app-ibk-login .ibk-fingerprint-left{gap:calc(1.1 * var(--ibk-login-unit))!important;}
+}
+
+html.ibk-iphone app-ibk-login .bienvenida-box {
+  position:fixed!important;
+  inset:0!important;
+  height:var(--ibk-login-height, 100svh)!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:var(--ibk-login-top) 0 0!important;
+  box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  transform:none!important;
+  overflow:hidden!important;
+  overscroll-behavior:none;
+}
+html.ibk-iphone app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center {
+  flex:0 0 calc(57 * var(--ibk-login-unit))!important;
+  height:calc(57 * var(--ibk-login-unit))!important;
+}
+html.ibk-iphone app-ibk-login .bienvenida-box > div:nth-child(2) {
+  flex:1 0 0!important;
+  height:auto!important;
+  padding-bottom:var(--ibk-login-bottom)!important;
+}
+html.ibk-iphone app-ibk-login .bienvenida-box .preCarga {
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+}
+html.ibk-iphone app-ibk-login input.clave {font-size:max(16px, calc(2.05 * var(--ibk-login-unit)))!important;}
+html.ibk-iphone app-ibk-login .ibk-safe-version {bottom:calc(var(--ibk-login-bottom) + 1.55 * var(--ibk-login-unit));}
+html.ibk-iphone-login-keyboard app-ibk-login .bienvenida-box {
+  height:var(--ibk-login-visible-height)!important;
+}
+html.ibk-iphone-login-keyboard app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center {
+  flex-basis:calc(10 * var(--ibk-login-unit))!important;
+  height:calc(10 * var(--ibk-login-unit))!important;
+}
+html.ibk-iphone-login-keyboard app-ibk-login .finFl,
+html.ibk-iphone-login-keyboard app-ibk-login .ibk-safe-banner {display:none!important;}
+html.ibk-iphone-login-keyboard app-ibk-login .bienvenida-box > div:nth-child(2) {
+  overflow-y:auto!important;
+  flex-shrink:1!important;
+  -webkit-overflow-scrolling:touch;
+}
+html.ibk-iphone-login-keyboard app-ibk-login .contraseña {min-height:calc(43 * var(--ibk-login-unit))!important;}
+@media (orientation:landscape) {
+  html.ibk-iphone app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center {
+    flex-basis:calc(52 * var(--ibk-login-unit))!important;
+    height:calc(52 * var(--ibk-login-unit))!important;
+  }
+}
+</style>
+<script id="ibk-iphone-login-viewport">
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  if(!root.classList.contains('ibk-iphone')) return;
+  var viewport=window.visualViewport;
+  var pending=0, settleTimer=0, active=false, insetProbe, safeTop=0;
+  var orientation=window.matchMedia('(orientation: portrait)').matches;
+  function setValue(name,value){
+    if(root.style.getPropertyValue(name)!==value) root.style.setProperty(name,value);
+  }
+  function toggle(name,value){
+    if(root.classList.contains(name)!==value) root.classList.toggle(name,value);
+  }
+  function editableFocused(){
+    var el=document.activeElement;
+    return el && el.closest('app-ibk-login') && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+  }
+  function sync(){
+    pending=0;
+    var login=document.querySelector('app-ibk-login');
+    var visible=!!login && getComputedStyle(login).display!=='none' && getComputedStyle(login).visibility!=='hidden';
+    var entered=visible && !active;
+    active=visible;
+    toggle('ibk-iphone-login',active);
+    if(!active){toggle('ibk-iphone-login-keyboard',false);return;}
+    if(!insetProbe){
+      insetProbe=document.createElement('div');
+      insetProbe.style.cssText='position:fixed;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none;';
+      document.body.appendChild(insetProbe);
+    }
+    var portrait=window.matchMedia('(orientation: portrait)').matches;
+    if(portrait!==orientation){
+      orientation=portrait;safeTop=0;
+      var notched=Math.max(screen.width,screen.height)>=812 && Math.min(screen.width,screen.height)>=375;
+      var installed=root.classList.contains('ibk-iphone-installed');
+      setValue('--ibk-login-initial-top',installed && portrait ? (notched ? '62px' : '20px') : '0px');
+    }
+    var measured=insetProbe.getBoundingClientRect().height;
+    // Retain the last real inset if WebKit briefly reports zero on resume.
+    if(measured>0 || !portrait) safeTop=measured;
+    if(safeTop>0) setValue('--ibk-login-measured-top',safeTop+'px');
+    else root.style.removeProperty('--ibk-login-measured-top');
+    var fullHeight=window.innerHeight;
+    var stableHeight=parseFloat(root.style.getPropertyValue('--ibk-login-height')) || fullHeight;
+    var visibleHeight=viewport ? viewport.height : fullHeight;
+    var keyboard=!!editableFocused() && visibleHeight<stableHeight-120;
+    toggle('ibk-iphone-login-keyboard',keyboard);
+    if(keyboard){
+      setValue('--ibk-login-visible-height',Math.round(visibleHeight)+'px');
+    }else if(!editableFocused()){
+      setValue('--ibk-login-height',fullHeight+'px');
+      if(entered || window.scrollY || window.scrollX) window.scrollTo(0,0);
+    }
+  }
+  function schedule(){if(!pending) pending=requestAnimationFrame(sync);}
+  function settled(){
+    schedule();clearTimeout(settleTimer);settleTimer=setTimeout(schedule,180);
+  }
+  function start(){
+    sync();
+    // Observe routing and component replacement, never our own style attributes.
+    new MutationObserver(schedule).observe(document.querySelector('app-root')||document.body,{childList:true,subtree:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true});
+  else start();
+  window.addEventListener('pageshow',settled);
+  window.addEventListener('resize',settled,{passive:true});
+  window.addEventListener('orientationchange',settled);
+  document.addEventListener('visibilitychange',function(){if(!document.hidden) settled();});
+  document.addEventListener('focusin',settled);
+  document.addEventListener('focusout',settled);
+  if(viewport){
+    viewport.addEventListener('resize',settled,{passive:true});
+    viewport.addEventListener('scroll',schedule,{passive:true});
+  }
+})();
+</script>
+
 </body></html>
