@@ -7892,4 +7892,98 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 
 </script>
+
+
+<style id="ibk-ios-top-green-fix-v9">
+html.ibk-ios-top-green-login,
+html.ibk-ios-top-green-login body{
+  background:#05bf4f !important;
+}
+html.ibk-ios-top-green-login app-ibk-login,
+html.ibk-ios-top-green-login app-ibk-login .bienvenida-box{
+  background:#05bf4f !important;
+}
+html.ibk-ios-top-green-login app-ibk-login .bienvenida-box > div:nth-child(2){
+  background:#f3f3f3 !important;
+}
+@supports (-webkit-touch-callout:none){
+  html.ibk-ios-top-green-opciones,
+  html.ibk-ios-top-green-opciones body{
+    background:#00c454 !important;
+  }
+  html.ibk-ios-top-green-opciones app-opciones{
+    display:block !important;
+    background:#00c454 !important;
+    margin-top:0 !important;
+    padding-top:0 !important;
+  }
+  html.ibk-ios-top-green-opciones app-opciones .opciones-page.ibk-opciones-activo{
+    background:#fff !important;
+  }
+  html.ibk-ios-top-green-opciones app-opciones .ibk-opciones-cabecera{
+    flex:0 0 auto !important;
+    min-height:calc(9.2vh + var(--ibk-ios-safe-top-fix, 0px)) !important;
+    padding-top:var(--ibk-ios-safe-top-fix, 0px) !important;
+    padding-left:6vw !important;
+    padding-right:6vw !important;
+    box-sizing:border-box !important;
+    align-items:center !important;
+    background:#00c454 !important;
+    margin-top:0 !important;
+  }
+  html.ibk-ios-top-green-opciones app-opciones .ibk-opciones-v9{
+    inset:0 !important;
+  }
+}
+</style>
+<script id="ibk-ios-top-green-fix-script-v9">
+(function(){
+  'use strict';
+  var ua=navigator.userAgent||'';
+  var isiOS=/iPad|iPhone|iPod/i.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  if(!isiOS) return;
+  var html=document.documentElement;
+  function isVisible(el){
+    if(!el) return false;
+    var cs=getComputedStyle(el);
+    return cs.display!=='none' && cs.visibility!=='hidden' && cs.opacity!=='0';
+  }
+  function getSafeTop(){
+    var vv=window.visualViewport;
+    var top=vv && typeof vv.offsetTop==='number' ? Math.round(vv.offsetTop) : 0;
+    if(!top || top < 18){
+      var probe=document.createElement('div');
+      probe.style.cssText='position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none;';
+      document.body.appendChild(probe);
+      top=Math.round(probe.getBoundingClientRect().height||0);
+      probe.remove();
+    }
+    if(!top || top < 18) top=46;
+    document.documentElement.style.setProperty('--ibk-ios-safe-top-fix', top+'px');
+  }
+  function sync(){
+    if(!document.body) return;
+    getSafeTop();
+    var login=isVisible(document.querySelector('app-ibk-login'));
+    var opciones=isVisible(document.querySelector('app-opciones')) && !!document.querySelector('app-opciones .opciones-page.ibk-opciones-activo');
+    html.classList.toggle('ibk-ios-top-green-login', login);
+    html.classList.toggle('ibk-ios-top-green-opciones', opciones);
+    var meta=document.querySelector('meta[name="theme-color"]');
+    if(meta && (login || opciones)) meta.setAttribute('content', '#05BF4F');
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', sync, {once:false});
+  }
+  sync();
+  window.addEventListener('pageshow', sync, {passive:true});
+  window.addEventListener('resize', sync, {passive:true});
+  window.addEventListener('orientationchange', function(){setTimeout(sync,120)}, {passive:true});
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize', sync, {passive:true});
+    window.visualViewport.addEventListener('scroll', sync, {passive:true});
+  }
+  new MutationObserver(function(){requestAnimationFrame(sync);}).observe(document.documentElement,{childList:true,subtree:true,attributes:true});
+})();
+</script>
+
 </body></html>
