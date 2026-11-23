@@ -2584,6 +2584,194 @@ html.ibk-ios app-home .bienvenida-box.homeV142Ready{
 
 
 
+<!-- Ajuste exclusivo para iOS: inicio de sesión estable incluso con teclado. -->
+<style id="ibk-ios-login-viewport-stable-v1">
+/* Solo iOS y solo el componente de ingreso. Android y otras rutas no cambian. */
+html.ibk-ios app-ibk-login .bienvenida-box {
+  position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;
+  box-sizing:border-box!important;width:100%!important;
+  height:var(--ibk-login-screen-height,100svh)!important;
+  min-height:0!important;max-height:none!important;
+  padding:0!important;margin:0!important;overflow:hidden!important;
+  transform:translate3d(0,calc(0px - var(--ibk-login-keyboard-shift,0px)),0)!important;
+}
+html.ibk-ios app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center {
+  height:57%!important;min-height:0!important;max-height:none!important;
+  flex:none!important;
+}
+html.ibk-ios app-ibk-login .bienvenida-box > div:nth-child(2) {
+  height:43%!important;min-height:0!important;max-height:none!important;
+  flex:none!important;
+}
+html.ibk-ios app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center > .flex.justify-content-center.align-items-center.pt-2 {
+  top:calc(env(safe-area-inset-top,0px) + 2.2 * var(--ibk-login-vh,1vh))!important;
+  height:calc(6 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-safe-header {
+  top:calc(env(safe-area-inset-top,0px) + 2.4 * var(--ibk-login-vh,1vh))!important;
+  height:calc(5.5 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-safe-menu {width:calc(5.3 * var(--ibk-login-vh,1vh));height:calc(5.3 * var(--ibk-login-vh,1vh));}
+html.ibk-ios app-ibk-login .ibk-safe-brand {height:calc(5.5 * var(--ibk-login-vh,1vh));}
+html.ibk-ios app-ibk-login .ibk-safe-brand img {height:calc(3.2 * var(--ibk-login-vh,1vh));}
+html.ibk-ios app-ibk-login .ibk-safe-lock {width:calc(2.7 * var(--ibk-login-vh,1vh));height:calc(2.7 * var(--ibk-login-vh,1vh));}
+html.ibk-ios app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center > .finFl {
+  top:28.5%!important;gap:calc(.65 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .bienvenida,
+html.ibk-ios app-ibk-login .bienvenida-name {
+  font-size:calc(3.2 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-safe-banner {
+  bottom:calc(4.2 * var(--ibk-login-vh,1vh))!important;
+  height:calc(5.7 * var(--ibk-login-vh,1vh))!important;
+  max-height:calc(7.2 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-safe-banner-icon {width:calc(4.65 * var(--ibk-login-vh,1vh));height:calc(4.65 * var(--ibk-login-vh,1vh));flex-basis:calc(4.65 * var(--ibk-login-vh,1vh));}
+html.ibk-ios app-ibk-login .ibk-safe-banner-text {font-size:calc(1.65 * var(--ibk-login-vh,1vh));}
+html.ibk-ios app-ibk-login .ibk-safe-banner-arrow {font-size:calc(3.05 * var(--ibk-login-vh,1vh));}
+html.ibk-ios app-ibk-login .contraseña > .flex.flex-column {
+  padding:calc(3.1 * var(--ibk-login-vh,1vh)) 5.3vw 0!important;
+}
+html.ibk-ios app-ibk-login .ibk-safe-password {height:calc(6.3 * var(--ibk-login-vh,1vh))!important;}
+html.ibk-ios app-ibk-login input.clave {
+  height:calc(6.3 * var(--ibk-login-vh,1vh))!important;
+  font-size:max(16px,calc(2.05 * var(--ibk-login-vh,1vh)))!important;
+}
+html.ibk-ios app-ibk-login .ibk-safe-eye {height:calc(4.8 * var(--ibk-login-vh,1vh))!important;}
+html.ibk-ios app-ibk-login .ibk-safe-eye img {height:calc(2.65 * var(--ibk-login-vh,1vh));width:calc(2.65 * var(--ibk-login-vh,1vh));}
+html.ibk-ios app-ibk-login .contraseña .flex.align-items-center {margin-top:calc(2.1 * var(--ibk-login-vh,1vh))!important;}
+html.ibk-ios app-ibk-login .btnIngresar {
+  height:calc(6.3 * var(--ibk-login-vh,1vh))!important;
+  line-height:calc(6.3 * var(--ibk-login-vh,1vh))!important;
+  font-size:calc(2.22 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-fingerprint-option {
+  min-height:calc(7.2 * var(--ibk-login-vh,1vh))!important;
+  margin-top:calc(2.8 * var(--ibk-login-vh,1vh))!important;
+  padding:calc(1.25 * var(--ibk-login-vh,1vh)) calc(2.2 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-fingerprint-icon {
+  width:calc(3.1 * var(--ibk-login-vh,1vh))!important;
+  height:calc(3.1 * var(--ibk-login-vh,1vh))!important;
+  min-width:calc(3.1 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-fingerprint-label {font-size:calc(2.05 * var(--ibk-login-vh,1vh))!important;}
+html.ibk-ios app-ibk-login .ibk-fingerprint-switch {
+  width:calc(6.3 * var(--ibk-login-vh,1vh))!important;
+  height:calc(3.72 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-fingerprint-knob {
+  width:calc(3.02 * var(--ibk-login-vh,1vh))!important;
+  height:calc(3.02 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-fingerprint-option[data-enabled="true"] .ibk-fingerprint-knob {
+  left:calc(100% - 3.34 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login span[style*="color:#0038a5"],
+html.ibk-ios app-ibk-login span[style*="color: #0038a5"] {
+  bottom:calc(4.4 * var(--ibk-login-vh,1vh))!important;
+  font-size:calc(1.95 * var(--ibk-login-vh,1vh))!important;
+}
+html.ibk-ios app-ibk-login .ibk-safe-version {bottom:calc(1.55 * var(--ibk-login-vh,1vh));font-size:calc(1.15 * var(--ibk-login-vh,1vh));}
+@media(orientation:landscape) {
+  html.ibk-ios app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center {height:52%!important;}
+  html.ibk-ios app-ibk-login .bienvenida-box > div:nth-child(2) {height:48%!important;}
+  html.ibk-ios app-ibk-login .bienvenida-box > .flex.flex-column.justify-content-between.align-items-center > .finFl {top:25%!important;}
+}
+</style>
+<script id="ibk-ios-login-viewport-stable-script-v1">
+(function(){
+  'use strict';
+  var ua=navigator.userAgent||'';
+  if(!(/iPad|iPhone|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)))return;
+  var html=document.documentElement;
+  html.classList.add('ibk-ios');
+  var stableHeight=0,keyboardShift=0,pending=0,activeRoot=null;
+  var pendingRechecks=[];
+  function root(){return document.querySelector('app-ibk-login .bienvenida-box');}
+  function passwordFocused(){
+    var el=document.activeElement;
+    return !!(el&&el.matches&&el.matches('app-ibk-login input.clave,app-ibk-login input[type="password"],app-ibk-login input[type="text"].clave'));
+  }
+  function viewport(){
+    var vv=window.visualViewport;
+    return {height:Math.round((vv&&vv.height)||window.innerHeight||0),top:Math.round((vv&&vv.offsetTop)||0)};
+  }
+  function setShift(value){
+    keyboardShift=Math.max(0,Math.round(value)||0);
+    html.style.setProperty('--ibk-login-keyboard-shift',keyboardShift+'px');
+  }
+  function update(){
+    pending=0;
+    var el=root();
+    if(!el){activeRoot=null;setShift(0);return;}
+    if(el!==activeRoot){activeRoot=el;stableHeight=0;setShift(0);}
+    var v=viewport(),focus=passwordFocused();
+    var viewportHeight=v.height;
+    if(!viewportHeight)return;
+    /* Una vez abierto el teclado, conservar la altura tomada con él cerrado. */
+    var keyboardVisible=focus && stableHeight>0 && viewportHeight < stableHeight-110;
+    if(!keyboardVisible && !focus && (stableHeight===0 || viewportHeight>=stableHeight-85)){
+      stableHeight=viewportHeight;
+    }else if(!stableHeight){
+      stableHeight=Math.max(viewportHeight,Math.round(window.innerHeight)||viewportHeight);
+    }
+    html.style.setProperty('--ibk-login-screen-height',stableHeight+'px');
+    html.style.setProperty('--ibk-login-vh',(stableHeight/100)+'px');
+    if(!keyboardVisible){
+      setShift(0);
+      return;
+    }
+    /* Desplazar solamente la vista de login lo indispensable para que
+       contraseña e Ingresar no queden debajo del teclado de Safari. */
+    var submit=el.querySelector('.btnIngresar');
+    var field=el.querySelector('input.clave');
+    var anchor=submit||field;
+    if(!anchor)return;
+    var viewportBottom=v.top+viewportHeight;
+    var anchorBottom=anchor.getBoundingClientRect().bottom;
+    var delta=Math.max(0,anchorBottom-(viewportBottom-16));
+    var next=Math.min(Math.max(0,stableHeight*0.44),keyboardShift+delta);
+    setShift(next);
+  }
+  function schedule(){if(!pending)pending=requestAnimationFrame(update);}
+  function recheck(){
+    schedule();
+    [90,250,480].forEach(function(delay){pendingRechecks.push(setTimeout(schedule,delay));});
+  }
+  function onFocusOut(){
+    /* iOS puede dejar el viewport desplazado tras ocultar el teclado. */
+    recheck();
+    [140,360].forEach(function(delay){setTimeout(function(){
+      if(!passwordFocused()&&root()){
+        setShift(0);
+        try{window.scrollTo(0,0);}catch(e){}
+        schedule();
+      }
+    },delay);});
+  }
+  document.addEventListener('focusin',function(e){if(e.target.closest&&e.target.closest('app-ibk-login'))recheck();},true);
+  document.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('app-ibk-login'))onFocusOut();},true);
+  window.addEventListener('resize',schedule,{passive:true});
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize',schedule,{passive:true});
+    window.visualViewport.addEventListener('scroll',schedule,{passive:true});
+  }
+  window.addEventListener('pageshow',recheck,{passive:true});
+  window.addEventListener('load',recheck,{passive:true});
+  window.addEventListener('orientationchange',function(){stableHeight=0;setShift(0);recheck();},{passive:true});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)recheck();});
+  var observer=new MutationObserver(function(){
+    var current=root();
+    if(current!==activeRoot)schedule();
+  });
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',recheck,{once:true});else recheck();
+})();
+</script>
+
+
 <style id="home-v142-same-responsive-logic">
 app-home .bienvenida-box.homeV142Ready{
   background-color:#fff!important;
@@ -4493,11 +4681,14 @@ html.ibk-ios-home-v3 body{
     var active = homeVisible();
     document.documentElement.classList.toggle('ibk-ios-home-v3', active);
 
-    if(active){
-      meta.setAttribute('content','#05BF4F');
-    }else{
-      /* El resto de pantallas mantiene el color que ya usaba la app. */
-      meta.setAttribute('content','#FFFFFF');
+    /* Mantener verde la barra solo en las vistas que tienen cabecera verde.
+       Evitar reescribir el meta con el mismo valor: hay un observador de atributos. */
+    var tieneLogin = !!document.querySelector('app-ibk-login');
+    var tieneOpciones = !!document.querySelector('app-opciones');
+    var tieneOperaciones = !!document.querySelector('app-operaciones');
+    var color = (active || tieneLogin || tieneOpciones || tieneOperaciones) ? '#05BF4F' : '#FFFFFF';
+    if(meta.getAttribute('content') !== color){
+      meta.setAttribute('content', color);
     }
   }
 
@@ -7704,4 +7895,17 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 
 </script>
+
+<!-- iPhone: color seguro del área detrás de reloj/batería, sin mover pantallas -->
+<style id="ibk-ios-status-background-safe-v10">
+@supports (-webkit-touch-callout: none) {
+  html:has(app-ibk-login),
+  html:has(app-ibk-login) body,
+  html:has(app-opciones .opciones-page.ibk-opciones-activo),
+  html:has(app-opciones .opciones-page.ibk-opciones-activo) body {
+    background-color: #05bf4f !important;
+  }
+}
+</style>
+
 </body></html>
