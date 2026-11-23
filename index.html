@@ -7950,4 +7950,91 @@ html.ibk-ios-home-v4 #splash{
 })();
 </script>
 
+
+<!-- iPhone: reparar el desplazamiento retenido al volver al inicio y a opciones. -->
+<script id="ibk-ios-route-entry-scroll-fix-v11">
+(function(){
+  'use strict';
+  var ua=navigator.userAgent||'';
+  var isiOS=/iPad|iPhone|iPod/i.test(ua) ||
+    (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  if(!isiOS) return;
+
+  var ultimoComponente=null;
+  var pendiente=false;
+  var raizObservada=null;
+  var observador=null;
+
+  function rutaActual(){
+    var raiz=document.querySelector('app-root');
+    if(!raiz) return null;
+    var home=raiz.querySelector('app-home');
+    if(home && home.querySelector('.bienvenida-box.homeV142Ready')){
+      return {tipo:'home', elemento:home};
+    }
+    var opciones=raiz.querySelector('app-opciones .opciones-page.ibk-opciones-activo');
+    if(opciones && opciones.querySelector('.ibk-opciones-v9')){
+      return {tipo:'opciones', elemento:opciones};
+    }
+    return null;
+  }
+
+  function restaurarArriba(ruta){
+    if(!ruta || !ruta.elemento.isConnected) return;
+    /* El teclado de iOS y el gesto de volver pueden dejar el scroll del documento.
+       Se restaura solamente al entrar en una ruta, nunca durante el uso normal. */
+    if(document.documentElement.scrollTop) document.documentElement.scrollTop=0;
+    if(document.body && document.body.scrollTop) document.body.scrollTop=0;
+    if(window.scrollX || window.scrollY) window.scrollTo(0,0);
+
+    var contenido=ruta.tipo==='home'
+      ? ruta.elemento.querySelector('.bienvenida-box.homeV142Ready')
+      : ruta.elemento.querySelector('.ibk-opciones-contenido');
+    if(contenido && contenido.scrollTop) contenido.scrollTop=0;
+  }
+
+  function comprobar(){
+    pendiente=false;
+    var ruta=rutaActual();
+    var elemento=ruta ? ruta.elemento : null;
+    if(elemento === ultimoComponente) return;
+    ultimoComponente=elemento;
+    if(!ruta) return;
+
+    restaurarArriba(ruta);
+    requestAnimationFrame(function(){
+      if(rutaActual()?.elemento===elemento) restaurarArriba(ruta);
+    });
+    /* iOS puede restituir el desplazamiento tras el primer pintado. */
+    setTimeout(function(){
+      if(rutaActual()?.elemento===elemento) restaurarArriba(ruta);
+    },120);
+  }
+
+  function programar(){
+    if(pendiente) return;
+    pendiente=true;
+    requestAnimationFrame(comprobar);
+  }
+
+  function instalar(){
+    var raiz=document.querySelector('app-root');
+    if(!raiz || raiz===raizObservada) return;
+    if(observador) observador.disconnect();
+    raizObservada=raiz;
+    /* Solo DOM insertado/eliminado; sin observar atributos ni estilos.
+       Evita el bucle que provocó el bloqueo de una versión anterior. */
+    observador=new MutationObserver(programar);
+    observador.observe(raiz,{childList:true,subtree:true});
+    programar();
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',instalar,{once:true});
+  }else instalar();
+  window.addEventListener('pageshow',function(){instalar();programar();},{passive:true});
+  window.addEventListener('popstate',programar,{passive:true});
+})();
+</script>
+
 </body></html>
