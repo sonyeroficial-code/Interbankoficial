@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
-    #splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff;z-index:99999;transition:opacity .4s}
+    #splash{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#05BF4F;z-index:99999;transition:opacity .4s}
     #splash img{width:18vh;animation:pulse 1.8s ease-in-out infinite}
     @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.06);opacity:.85}}
     #splash.hide{opacity:0;pointer-events:none}
@@ -7907,5 +7907,47 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   }
 }
 </style>
+
+
+<style id="ibk-ios-home-tuning-v10">
+/* Ajuste fino solo para iPhone: subir un poco el home y mantener splash verde */
+html.ibk-ios-home-v4{
+  --ibk-home-ios-top: 26px;
+}
+html.ibk-ios-home-v4 app-home .homeV142Top{
+  padding-top: var(--ibk-home-ios-top) !important;
+}
+html.ibk-ios-home-v4 app-home .homeV142Topbar{
+  align-items:center !important;
+}
+html.ibk-ios-home-v4 #splash{
+  background:#05BF4F !important;
+}
+</style>
+<script id="ibk-ios-home-tuning-script-v10">
+(function(){
+  'use strict';
+  var ua=navigator.userAgent||'';
+  var isiOS=/iPad|iPhone|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(!isiOS) return;
+  function updateHomeTop(){
+    if(!document.body) return;
+    var probe=document.createElement('div');
+    probe.style.cssText='position:fixed;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none;';
+    document.body.appendChild(probe);
+    var measured=Math.round(probe.getBoundingClientRect().height||0);
+    probe.remove();
+    var tuned=measured ? Math.max(20, Math.min(30, measured - 18)) : 26;
+    document.documentElement.style.setProperty('--ibk-home-ios-top', tuned + 'px');
+    var meta=document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute('content','#05BF4F');
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', updateHomeTop, {once:true});
+  } else updateHomeTop();
+  window.addEventListener('pageshow', updateHomeTop, {passive:true});
+  window.addEventListener('orientationchange', function(){setTimeout(updateHomeTop,120);}, {passive:true});
+})();
+</script>
 
 </body></html>
