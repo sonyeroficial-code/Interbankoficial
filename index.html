@@ -5508,7 +5508,9 @@ app-transf-editado .bienvenida-box.plin-demo-active > :not(.plin-demo-receipt) {
     ctx.fillStyle = '#fff'; ctx.fill();
     text('Plineo exitoso', 118, 334, 45, green, true);
 
-    const amount = String(data.amount || '0');
+    // En el PNG compartido, ocultar decimales cero sin alterar el monto real.
+    const amountOriginal = String(data.amount || '0').trim();
+    const amount = amountOriginal.replace(/([.,]\d*?[1-9])0+$/, '$1').replace(/[.,]0+$/, '');
     // Un poco más grande la barra de S/, manteniendo el importe alineado.
     const divisa = String(data.currency || 'S/').trim();
     if (divisa === 'S/') {
